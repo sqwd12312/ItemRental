@@ -1,0 +1,91 @@
+package com.qst.dao;
+
+import java.util.List;
+
+import javax.management.Query;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.taglibs.standard.lang.jstl.test.beans.PublicBean1;
+import org.apache.taglibs.standard.lang.jstl.test.beans.PublicInterface2;
+import org.springframework.stereotype.Repository;
+
+import com.qst.pojo.Paid;
+import com.qst.pojo.QueryPaid;
+import com.qst.pojo.QueryVo;
+@Repository
+public interface PaidMapper {
+	public List<Paid> selectall(QueryVo vo);
+
+	public Double selectsum(QueryVo vo);
+
+	//qny
+	//租客删除已缴纳的租金信息
+	public void deletepaid(Integer payId);
+
+	public void insertpaid(Paid paid);
+	
+	//qny
+	//根据租客Id查找已缴纳的租金
+	public List<QueryPaid> getPaidListByUserId(Integer userId);
+	
+	//qny
+	//根据物品id唯一查到一条支付信息
+	public Paid getPaidByItemId(Integer itemId);
+	
+	//qny
+	//根据前端的QueryVo中的起始到截止时间查询数据
+	public List<QueryPaid> getPaidListByTime(QueryVo vo);
+	
+	//qny
+	//根据QueryVo查询用户退回的租金 
+	public List<QueryPaid> getPaidBackListByQueryVo(QueryVo vo);
+	
+	//qny
+	//租客删除已退回的租金信息
+	public void deletePaidBackById(Integer id);
+	
+	//qny
+	//根据QueryVo和用户id查询共缴纳的租金金额
+    public Integer getAllPriceByUserId(@Param("vo")QueryVo vo,@Param("userId")Integer userId);
+		
+	//qny
+	//根据QueryVo和用户id查询总的退回租金金额
+	public Integer getAllBackPriceByUserId(@Param("vo")QueryVo vo,@Param("userId")Integer userId);
+	
+	//qny
+	//根据QueryVo和用户Id查询租金收入金额
+	public Integer getTotalIncome(@Param("vo") QueryVo vo,@Param("userId")Integer userId);
+	
+	//qny
+	//根据QueryVo查询租金收入信息
+	public List<QueryPaid> getIncomeByUserId(QueryVo vo);
+	
+	//qny
+	//根据支付订单号唯一查到一条支付信息
+	public Paid getPaidByOrderNumber(Integer orderNumber);
+	
+	//qny
+	//查询所有已缴纳的租金信息
+	public List<QueryPaid> getAllPaid(QueryVo vo);
+	
+	//qny
+	//查询已缴纳的租金总金额
+	public Integer getAllPaidRent(QueryVo vo);
+	
+	//qny
+	//查询所有已退回的租金信息
+	public List<QueryPaid> getAllPaidBack(QueryVo vo);
+	
+	//qny
+	//查询已缴纳的租金总金额
+	public Integer getAllPaidBackRent(QueryVo vo);
+	
+	//qny
+	//删除已退回的租金信息
+	public void deletePayBack(Integer payId);
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.ApplyMapper" >
+  <resultMap id="ApplyUserlistResultMap" type="Apply" >
+    <id column="apply_id" property="id" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+     <result column="price" property="price" jdbcType="DOUBLE" />
+     <result column="status" property="status" jdbcType="VARCHAR" />
+      <result column="userlist_id" property="userlist_id" jdbcType="INTEGER" />
+      <association property="userlist" javaType="Userlist">
+		<!-- column:userlist表的主键对应的列  property：userlist对象中id属性-->
+	    <id column="id" property="id"/>		
+	    <result column="user_name" property="name" jdbcType="VARCHAR" />
+        <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="user_id" property="user_id" jdbcType="INTEGER" />
+	 </association>
+  </resultMap> 
+ 	
+  <resultMap id="ApplyResultMap" type="Apply" >
+     <id column="apply_id" property="id" jdbcType="INTEGER" />
+     <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+     <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+     <result column="price" property="price" jdbcType="DOUBLE" />
+     <result column="status" property="status" jdbcType="VARCHAR" />
+     <result column="user_id" property="userId" jdbcType="INTEGER" />
+     <result column="fromdate" property="fromDate" jdbcType="VARCHAR" />
+     <result column="todate" property="toDate" jdbcType="VARCHAR" />
+     <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />     
+  </resultMap>
+  
+  <resultMap id="applyResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<collection property="apply" ofType="Apply">
+			<id property="id" column="apply_id" />
+			<result property="itemId" column="item_id" />
+			<result property="itemName" column="item_name" />
+			<result property="price" column="price" />
+			<result property="status" column="status" />
+			<result property="fromDate" column="fromdate" />
+			<result property="toDate" column="todate" />
+			<result property="totalPrice" column="total_price" />
+			<result property="masterName" column="username" />
+			<result property="masterPhone" column="masterphone" />
+			<result property="itemNumber" column="item_number" />						
+		</collection>		
+	</resultMap>
+  
+  <insert id="insertapply" parameterType="Apply">
+	  insert into apply(item_id,item_name,price,status,user_id,
+	                    fromdate,todate,total_price,item_number) 
+	  values(#{itemId},#{itemName},#{price},#{status},#{userId},
+	         #{fromDate},#{toDate},#{totalPrice},#{itemNumber})
+	</insert>
+
+	<select id="findByItemId" parameterType="string" resultMap="ApplyResultMap">
+		select * from apply where item_id=#{itemId}
+	</select>
+	<delete id="deleteByItemId" parameterType="String">
+		delete from apply where item_id=#{itemId}
+	</delete>
+	
+	<!-- 查询租客所有未拒绝申请 -->
+	<select id="findapplylist" resultMap="applyResultMap">
+		SELECT
+		u.*, a.*,i.*,r.*,r.phone as masterphone
+		FROM
+		`userlist` u
+		, apply a
+		, `item` i
+		, `user` r
+		where u.user_id = a.user_id and a.item_id = i.itemid 
+		and i.master_id = r.id and a.`status`="申请中"
+	</select>
+	
+	<!-- 用户查看自己物品的被申请租赁列表 -->
+	<select id="getMyApply" parameterType="Integer" resultMap="applyResultMap">
+		SELECT
+		u.*, a.*,i.*,r.*,r.phone as masterphone
+		FROM
+		`userlist` u
+		, apply a
+		, `item` i
+		, `user` r
+		where u.user_id = a.user_id and a.item_id = i.itemid 
+		and i.master_id = r.id and a.`status`="申请中"
+		and i.master_id=#{userId}
+	</select>
+	
+	<!-- 根据物品itemId更改申请状态 -->
+	<update id="updateApplyStatus" parameterType="Apply">
+		update apply set
+		status=#{status}
+		where item_id=#{itemId}
+	</update>
+</mapper>

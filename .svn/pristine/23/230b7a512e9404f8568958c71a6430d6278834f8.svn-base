@@ -1,0 +1,131 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>物品租赁系统</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script type="text/javascript" src="js/libs/modernizr.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-datepicker.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
+   <style>
+   
+
+.info {
+  
+  font-size:13px;
+  color: red;
+  
+}
+
+   </style>
+    <script type="text/javascript">
+    $().ready(function() {
+        // 在键盘按下并释放及提交后验证提交表单
+        $("#fromdate").datepicker();
+        $("#todate").datepicker();
+        $("#myform").validate({
+        	
+            rules : {
+            	fromDate: {
+                    required : true,
+                },
+                toDate: {
+                    required : true,
+                },
+                totalPrice: {
+                    required : true,
+                } 
+            },
+            messages : {
+            	fromDate: {
+                    required : "起租时间不能为空",
+                },
+                toDate: {
+                    required : "退租时间不能为空",
+                }
+                ,
+                totalPrice: {
+                    required : "总租金不能为空",
+                    min: "请输入正确的总租金"                 
+                }                
+            }
+        });
+    })
+    
+    
+	</script>
+	
+</head>
+<body>
+
+<div class="result-title">
+<h1>确认订单信息，请确定订单正确无误再提交！</h1>
+</div>
+<div class="result-content">
+<div class="sidebar-title">
+        <form action="InsertItemApply.action" method="post" id="myform" name="myform" enctype="multipart/form-data" >
+                    <table class="insert-tab" width="100%">
+                        <tbody>
+                           
+                           <tr>
+                           
+                                <th><i class="require-red">*</i>物品编号：</th>
+                                <td>
+                                    <input class="common-text required" value="${apply.itemNumber}" id="itemNumber" name="itemNumber" size="50" type="text" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><i class="require-red">*</i>物品名称：</th>
+                                <td><input class="common-text" name="itemName" value="${apply.itemName }" id="itemName" size="50" type="text" readonly></td>
+                            </tr>
+                            <tr>
+                                <th><i class="require-red">*</i>出租方（甲方）：</th>
+                                <td><input class="common-text" name="chuZu" value="${Chuzu}" id="chuzu" size="50" type="text" readonly></td>
+                            </tr>
+                             <tr>
+                                <th><i class="require-red">*</i>承租方（乙方）：</th>
+                              <td><input class="common-text" name="zuKe" value="${Zuke}" id="zuke" size="50" type="text" readonly></td>
+                            </tr>
+                            <tr>
+                                <th><i class="require-red">*</i>每日租金：</th>
+                              <td><input class="common-text" name="price" id="price" value="${apply.price}" size="50"  type="text" readonly></td>
+                            </tr>
+                             <tr>
+                                <th><i class="require-red">*</i>起租时间：</th>
+                              <td><input class="common-text" name="fromDate" id="fromdate" value="${apply.fromDate}" size="50"  type="text" readonly></td>
+                            </tr>
+                            <tr>
+                                <th><i class="require-red">*</i>退租时间：</th>
+                              <td><input class="common-text" name="toDate" id="todate" value="${apply.toDate}" size="50"  type="text" readonly></td>
+                            </tr> 
+                            <tr>
+                                <th><i class="require-red">*</i>需交租金：</th>
+                              <td><input class="common-text" name="totalPrice" id="totalPrice" value="${apply.totalPrice}" size="50"  type="text" ></td>
+                            </tr>                                                       
+								<tr>
+                                <th></th>
+                                <td>
+                                    <input type="hidden" name=itemId value="${apply.itemId}"/>
+                                    <input class="btn btn-primary btn6 mr10" value="提交" type="submit">
+                                    <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
+                                </td>
+                            </tr>
+							<tr>
+                                <font id="info" color="red">${info }</font>
+                            </tr>	
+                        </tbody></table>
+                </form>
+          </div>
+          </div>
+    
+</body>
+</html>

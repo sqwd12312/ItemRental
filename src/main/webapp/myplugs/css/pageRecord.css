@@ -1,0 +1,31 @@
+﻿@charset "utf-8";
+.pageRecord
+{
+    overflow:auto;
+    float:right;
+}
+.dvpagerecord {
+    padding:6px 12px;background-color: #EAEFF2;color: #2283C5;float:left;
+    border:1px solid #efefef;text-decoration:underline;
+    font-size:14px;
+    cursor:pointer;
+}
+.dvpagerecord:hover {
+    cursor:pointer;
+}
+.dvpagerecord:hover  i {
+    text-decoration:underline;
+}
+.ulpageRecord {
+    max-width:165px;float:left;white-space:nowrap;overflow:hidden;margin:0px;padding:0px;
+}
+.ulpageRecord li {
+    margin:0px;padding:6px 12px;background-color: #EAEFF2;color: #2283C5;display:inline-block;font-size:14px;border:1px solid #efefef;
+}
+.ulpageRecord li:hover {
+    text-decoration:underline;
+    cursor:pointer;
+}
+.currentPage {
+    background-color: #6FAED9 !important;color:white !important;
+}

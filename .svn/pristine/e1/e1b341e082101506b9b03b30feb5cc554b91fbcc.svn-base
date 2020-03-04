@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.EvaluationMapper" >
+
+	<resultMap id="BaseResultMap" type="Evaluation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="itemNumber" property="itemNumber" jdbcType="VARCHAR" />
+		<result column="zukeId" property="zukeId" jdbcType="VARCHAR" />
+		<result column="chuzuId" property="chuzuId" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="Evaluation">
+		 <id column="id" property="id" jdbcType="INTEGER" />
+		 <result column="itemNumber" property="itemNumber" jdbcType="VARCHAR" />
+		 <result column="time" property="time" jdbcType="TIMESTAMP" />
+		 <result column="content" property="content" jdbcType="VARCHAR" />
+		 <result column="phone" property="phoneNumber" jdbcType="VARCHAR" />
+		 <result column="user_name" property="userName" jdbcType="VARCHAR" />
+		 <result column="zukeId" property="zukeId" jdbcType="VARCHAR" />
+	   <association property="item" javaType="Item">
+	      <id column="itemId" property="itemId" jdbcType="INTEGER"/>		
+	      <result column="name" property="name" jdbcType="VARCHAR" />
+	   </association>
+	   
+	</resultMap>
+	
+    <!-- 插入一条评价 -->
+    <insert id="insertEvaluation" parameterType="Evaluation">
+    	         
+	  insert into evalution(itemNumber,zukeId,chuzuId,time,content) 
+	  values(#{itemNumber},#{zukeId},#{chuzuId},#{time},#{content})
+	  
+	</insert>
+	
+	<!-- 根据商品编号查询商品评价 -->
+	<select id="getEvalutionByItemNumber" parameterType="String" resultMap="BaseResultMap">
+      SELECT e.*,u.* FROM `evalution` e 
+      left join `userlist` u on e.zukeId = u.user_id
+      where e.itemNumber = #{itemNumber}
+	</select>
+	
+	<!-- 用户查看自己曾经给出的全部评价 -->
+	<select id="getMyZulingEvaluation" parameterType="String" resultMap="BaseResultMap2">
+      SELECT e.itemNumber,e.id,e.time,e.content,i.`name`,i.itemId  
+      FROM `evalution` e
+      left join `item` i on e.itemNumber = i.item_number
+      where e.zukeId = #{zukeId}
+	</select>
+	
+	<!-- 用户更改评价 -->
+	<update id="UpdateEvaluation" parameterType="Evaluation">
+		update evalution set 
+		time = #{time},
+		content = #{content}
+		where id = #{id}
+	</update>
+	
+	<!-- 根据评价表id删除一条评价 -->
+	<delete id="deleteEvalutionById" parameterType="Integer">
+	    delete from evalution where id = #{id}
+	</delete>
+	
+	<!-- 用户查询自己出租物品受到的评价 -->
+	<select id="getAllEvaluationFromZuke" parameterType="Integer" resultMap="BaseResultMap2">
+      SELECT e.itemNumber,e.id,e.time,e.content,i.`name`,u.user_name,u.phone
+      FROM `evalution` e
+      left join `item` i on e.itemNumber = i.item_number
+	  left join `userlist` u on e.zukeId = u.user_id
+	  where i.master_id = #{userId}
+	</select>
+	
+	<!-- 管理员查看所有评价 -->
+	<select id="getItemEvaluations"  resultMap="BaseResultMap2">
+      SELECT e.itemNumber,e.zukeId,e.id,e.time,e.content,i.`name`,i.itemId  
+      FROM `evalution` e
+      left join `item` i on e.itemNumber = i.item_number
+	</select>
+	  
+</mapper>

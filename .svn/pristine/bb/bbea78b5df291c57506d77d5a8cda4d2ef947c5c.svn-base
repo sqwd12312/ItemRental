@@ -1,0 +1,235 @@
+
+package com.qst.controller;
+
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.qst.pojo.Apply;
+import com.qst.pojo.Hetong;
+import com.qst.pojo.Item;
+import com.qst.pojo.Paid;
+import com.qst.pojo.QueryPaid;
+import com.qst.pojo.QueryVo;
+import com.qst.pojo.Topaid;
+import com.qst.pojo.User;
+import com.qst.pojo.Userlist;
+import com.qst.pojo.Zulist;
+import com.qst.service.ItemService;
+import com.qst.service.PaidService;
+import com.qst.service.TopaidService;
+import com.qst.service.UserlistService;;
+
+@Controller
+@RequestMapping("/paid")
+public class PaidController {
+	@Autowired
+	private PaidService paidService;
+	@Autowired
+	private TopaidService topaidService;
+	@Autowired
+	private UserlistService userlistService;
+	@Autowired
+	private ItemService itemService;
+
+	// 管理员查找所有已缴租金列表
+	@RequestMapping("/selectall")
+	public String selectall(Model model, QueryVo vo, @RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+		PageHelper.startPage(page, pageSize);
+		List<Paid> list = paidService.selectall(vo);
+		PageInfo<Paid> p = new PageInfo<Paid>(list);
+		Double sum = paidService.selectsum(vo);
+		model.addAttribute("paid", list);
+		model.addAttribute("sum", sum);
+		model.addAttribute("p", p);
+		model.addAttribute("mainPage", "paid.jsp");
+		model.addAttribute("vo", vo);
+		return "admin/main1";
+	}
+
+	//qny
+	// 租客查看自己已缴租金列表
+	@RequestMapping("/findmypaid")
+	public String findmypaid(HttpSession httpSession, Model model,QueryVo vo,
+			@RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+		User user1 = (User) httpSession.getAttribute("user");
+		vo.setUserId(user1.getId());
+		PageHelper.startPage(page, pageSize);
+		List<QueryPaid> queryPaids = paidService.getPaidListByTime(vo);
+		PageInfo<QueryPaid> p = new PageInfo<QueryPaid>(queryPaids);
+		model.addAttribute("queryPaids", queryPaids);
+		Integer sumPrice = paidService.getAllPriceByUserId(user1.getId());
+		model.addAttribute("sum", sumPrice);
+		model.addAttribute("p", p);
+		model.addAttribute("mainPage", "mypaid.jsp");
+		return "zuke/main";
+	}
+
+	// 管理员删除已缴租金记录
+	@RequestMapping("/deletepaid")
+	public String deletepaid(Integer id) {
+		paidService.deletepaid(id);
+		return "redirect:selectall.action";
+	}
+
+	//qny
+	//zuke删除已缴租金记录
+	@RequestMapping("/zukedeletepaid")
+	public String zukedeletepaid(Integer id) {
+		paidService.deletepaid(id);
+		return "redirect:findmypaid.action";
+	}
+	
+	//qny
+	//用户删除租金收入记录
+	@RequestMapping("/deleteIncomeMesByUser")
+	public String deleteIncomeMesByUser(Integer id) {
+		paidService.deletepaid(id);
+		return "redirect:incomeByUser.action";
+	}	
+
+	// 跳到我要收租页面
+	@RequestMapping("/showaddpaid")
+	public String showaddpaid(Model model, @RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+		PageHelper.startPage(page, pageSize);
+		List<Zulist> list = paidService.findzuuserlist();
+		PageInfo<Zulist> p = new PageInfo<Zulist>(list);
+		model.addAttribute("zulist", list);
+		model.addAttribute("p", p);
+		model.addAttribute("mainPage", "showaddpaid.jsp");
+		return "admin/main1";
+	}
+
+	// 点击收租后跳转到添加租金信息页面
+	@RequestMapping("/addpaid")
+	public String addpaid(Integer id, Model model) {
+		Zulist zulist = paidService.findzukezulist(id);
+		model.addAttribute("zulist", zulist);
+		model.addAttribute("mainPage", "addpaid.jsp");
+		return "admin/main1";
+	}
+
+	// 添加租金信息到topaid表
+	@RequestMapping("/inserttopaid")
+	public String inserttopaid(Topaid topaid, Model model) {
+		topaidService.inserttopaid(topaid);
+		model.addAttribute("error", "inserttopaid");
+
+		return "redirect:showaddpaid.action";
+	}
+
+	// 管理员查看所有未缴租金信息
+	@RequestMapping("/topaidlist")
+	public String topaidlist(Model model, @RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+		QueryVo vo = new QueryVo();
+		PageHelper.startPage(page, pageSize);
+		List<Topaid> list = topaidService.findtopaid(vo);
+		PageInfo<Topaid> p = new PageInfo<Topaid>(list);
+		model.addAttribute("topaid", list);
+		model.addAttribute("p", p);
+		model.addAttribute("mainPage", "topaid.jsp");
+		return "admin/main1";
+	}
+
+	// 租客查看自己的未缴租金
+	@RequestMapping("/mytopaidlist")
+	public String mytopaidlist(Model model, HttpSession httpSession,
+			@RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+		User user1 = (User) httpSession.getAttribute("user");
+		QueryVo vo = new QueryVo();
+		vo.setUserId(user1.getId());
+		PageHelper.startPage(page, pageSize);
+		List<Topaid> topaid = topaidService.findtopaid(vo);
+		PageInfo<Topaid> p = new PageInfo<Topaid>(topaid);
+		model.addAttribute("p", p);
+		model.addAttribute("topaid", topaid);
+		model.addAttribute("mainPage", "mytopaid.jsp");
+		return "zuke/main";
+	}
+
+	//qny
+	// 租客进行支付操作
+	@RequestMapping("/gotopay")
+	public String gotopay(Integer itemId, Model model,HttpSession httpSession) {
+		User user1 = (User)httpSession.getAttribute("user");
+		Item item = itemService.findId(itemId);
+		Apply apply = new Apply();
+		Userlist userlist = userlistService.findhasuserlist(item.getMasterId());
+		apply.setItemId(item.getItemId().toString());
+		apply.setItemName(item.getName());
+		apply.setPrice(item.getPrice());
+		apply.setStatus("已申请");
+		apply.setUserId(user1.getId());
+		apply.setItemNumber(item.getItemNumber());
+		model.addAttribute("apply",apply);
+		model.addAttribute("Chuzu",userlist.getName());
+		model.addAttribute("Zuke",user1.getUsername());
+		model.addAttribute("mainPage","checkorder.jsp");
+		return "zuke/main";
+	}
+	
+	//qny
+	//租客查看退回的租金
+	@RequestMapping("/getMyPaidBack")
+	public String getMyPaidBack(HttpSession httpSession,Model model,QueryVo vo,
+			@RequestParam(required = false,defaultValue="1") Integer page,
+			@RequestParam(required = false,defaultValue="2") Integer pageSize){
+		User user = (User) httpSession.getAttribute("user");
+		vo.setUserId(user.getId());
+		PageHelper.startPage(page, pageSize);
+		List<QueryPaid> paids = paidService.getPaidBackListByQueryVo(vo);
+		PageInfo<QueryPaid> p = new PageInfo<>(paids);
+		model.addAttribute("paids",paids);
+		model.addAttribute("p",p);
+		int sumBackPrice = paidService.getAllBackPriceByUserId(user.getId());
+		model.addAttribute("sum",sumBackPrice);
+		model.addAttribute("mainPage","mypaidback.jsp");	
+		return "zuke/main";
+	}
+	
+	//qny
+	//租客删除退回的租金信息
+	@RequestMapping("/deletePaidBack")
+	public String deletePaidBackById(Integer id){
+		paidService.deletePaidBackById(id);
+		return"redirect:getMyPaidBack.action";
+	}
+	
+	//qny
+	//用户查看自己的租金收入
+	@RequestMapping("/incomeByUser")
+	public String incomeByUserId(QueryVo vo,Model model,HttpSession httpSession,
+			@RequestParam(required = false,defaultValue = "1") Integer page,
+			@RequestParam(required = false,defaultValue = "2") Integer pageSize){
+		
+		User user = (User)httpSession.getAttribute("user");
+		vo.setUserId(user.getId());
+		//1.查询用户的租金收入信息
+		PageHelper.startPage(page, pageSize);
+		List<QueryPaid> paids = paidService.getIncomeByUserId(vo);
+		PageInfo<QueryPaid> p = new PageInfo<>(paids);
+		model.addAttribute("paids",paids);
+		model.addAttribute("p",p);
+		//2.查询用户总的租金收入金额
+		int totalIncome = paidService.getTotalIncome(user.getId());
+		model.addAttribute("totalIncome",totalIncome);
+		model.addAttribute("mainPage","income.jsp");
+		return"zuke/main";
+	}
+	
+	
+}

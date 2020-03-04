@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.PaidMapper">
+	<resultMap id="BaseResultMap" type="Paid">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="paydate" property="paydate" jdbcType="DATE" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="master_id" property="masterId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="QueryPaidMap" type="QueryPaid">
+		<association property="paid" javaType="Paid">
+			<id column="id" property="id" jdbcType="INTEGER"/>
+			<result column="item_id" property="itemId" jdbcType="VARCHAR"/>
+			<result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+			<result column="price" property="price" jdbcType="DOUBLE"/>
+			<result column="paydate" property="paydate" jdbcType="VARCHAR"/>
+			<result column="status" property="status" jdbcType="VARCHAR"/>
+			<result column="item_number" property="itemNumber" jdbcType="VARCHAR"/>			
+		</association>
+		<association property="zuke" javaType="Userlist">
+			<id column="user_id" property="user_id" jdbcType="INTEGER"/>
+			<result column="user_name" property="name" jdbcType="VARCHAR"/>
+			<result column="phone" property="phone" jdbcType="VARCHAR"/>			
+		</association>
+		<association property="chuzu" javaType="Userlist">
+			<id column="master_id" property="user_id" jdbcType="INTEGER"/>
+			<result column="master_name" property="name" jdbcType="VARCHAR"/>
+			<result column="master_phone" property="phone" jdbcType="VARCHAR"/>			
+		</association>
+	</resultMap>
+	
+	<resultMap id="QueryPaidMap2" type="QueryPaid">
+		<association property="paid" javaType="Paid">
+			<id column="id" property="id" jdbcType="INTEGER"/>
+			<result column="item_number" property="itemNumber" jdbcType="VARCHAR"/>
+			<result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+			<result column="price" property="price" jdbcType="DOUBLE"/>
+			<result column="paydate" property="paydate" jdbcType="VARCHAR"/>
+			<result column="status" property="status" jdbcType="VARCHAR"/>			
+		</association>
+		<association property="zuke" javaType="Userlist">
+			<id column="user_id" property="user_id" jdbcType="INTEGER"/>
+			<result column="user_name" property="name" jdbcType="VARCHAR"/>
+			<result column="phone" property="phone" jdbcType="VARCHAR"/>			
+		</association>
+		<association property="chuzu" javaType="Userlist">
+			<id column="master_id" property="user_id" jdbcType="INTEGER"/>
+			<result column="master_name" property="name" jdbcType="VARCHAR"/>
+			<result column="master_phone" property="phone" jdbcType="VARCHAR"/>			
+		</association>
+	</resultMap>
+	
+	<select id="selectall" resultMap="BaseResultMap" parameterType="QueryVo">
+		select * from paid
+		<where>
+			<if test="zuname!=null and zuname!=''">
+				and user_name like '%${zuname}%'
+			</if>
+			<if test="fromdate!=null and fromdate!=''">
+				and date &gt;= #{fromdate}
+			</if>
+			<if test="todate!=null and todate!=''">
+				and date &lt;= #{todate}
+			</if>
+			<if test="userlist_id!=null and userlist_id!=''">
+				and userlist_id=#{userlist_id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据前端的QueryVo中的起始到截止时间查询数据 -->
+	<select id="getPaidListByTime" resultMap="QueryPaidMap2" parameterType="QueryVo">	
+	   select p.id,p.item_number,p.item_name,p.price,p.paydate,p.user_id,p.master_id,p.status,
+       u.user_name,u.phone,
+       u2.user_name as master_name,u2.phone as master_phone
+       from `paid` p left join `userList` u on p.user_id = u.user_id
+       left join `userList` u2 on p.master_id = u2.user_id
+       where p.user_id = #{userId}
+       and p.status = "已缴纳"
+       <if test="fromdate!=null and fromdate!=''">
+				and p.paydate &gt;= #{fromdate}
+	   </if>
+	   <if test="todate!=null and todate!=''">
+				and p.paydate &lt;= #{todate}
+	   </if>
+
+	</select>
+	
+	<!-- 租客删除已缴纳的租金信息 -->
+	<delete id="deletepaid" parameterType="Integer">
+		delete from paid
+		where id=#{id} and status="已缴纳"
+	</delete>
+	
+	<!-- 租客删除已退回的租金信息 -->
+	<delete id="deletePaidBackById" parameterType="Integer">
+		delete from paid
+		where id=#{id} and status="租金退回"
+	</delete>
+	
+	<!-- 插入一条支付记录 -->
+	<insert id="insertpaid" parameterType="Paid">
+		insert into
+		paid(item_number,item_name,price,paydate,status,
+		user_name,user_id,master_id)
+		values(#{itemNumber},#{itemName},#{price},#{paydate},#{status},
+		#{userName},#{userId},#{masterId})
+		<!-- 指定结果类型resultType，keyProperty是属性，自动返回到属性id中，order是次序，after是指获取id是在于插入后 -->
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+	</insert>
+	
+	<!-- 根据租客Id查找已缴纳的租金列表 -->
+	<select id="getPaidListByUserId" parameterType="Integer" resultMap="QueryPaidMap">
+	   select p.id,p.item_id,p.item_name,p.price,p.paydate,p.user_id,p.master_id,p.status,
+       u.user_name,u.phone,
+       u2.user_name as master_name,u2.phone as master_phone
+       from `paid` p left join `userList` u on p.user_id = u.user_id
+       left join `userList` u2 on p.master_id = u2.user_id
+       where p.user_id = #{userId}
+       and p.status = "已缴纳"	
+	</select>
+	
+	<!-- 根据物品id唯一查到一条支付信息 -->
+	<select id="getPaidByItemId" parameterType="Integer" resultMap="BaseResultMap">
+	   select * from `paid` where item_id=#{itemId}
+       and status="已缴纳"	
+	</select>
+	
+	<!-- 根据用户Id和QueryVo查询共缴纳的租金金额 -->
+	<select id="getAllPriceByUserId"  resultType="Integer">
+	   select sum(price) from `paid` where user_id=#{userId} and status = "已缴纳"
+	   <if test="vo.fromdate!=null and vo.fromdate!=''">
+				and paydate &gt;= #{vo.fromdate}
+	   </if>
+	   <if test="vo.todate!=null and vo.todate!=''">
+				and paydate &lt;= #{vo.todate}
+	   </if>
+	</select>
+	
+	<!-- 根据用户Id和QueryVo查询总的退回租金金额 -->
+	<select id="getAllBackPriceByUserId"  resultType="Integer">
+	   select sum(price) from `paid` where user_id=#{userId} and status = "租金退回"
+	   <if test="vo.fromdate!=null and vo.fromdate!=''">
+				and paydate &gt;= #{vo.fromdate}
+	   </if>
+	   <if test="vo.todate!=null and vo.todate!=''">
+				and paydate &lt;= #{vo.todate}
+	   </if>
+	</select>
+	
+	<!-- 根据QueryVo和用户Id查询租金收入金额 -->
+	<select id="getTotalIncome"  resultType="Integer">
+      SELECT SUM(price) FROM `paid`  
+      where master_id = 2
+      and status = "已缴纳"
+	  <if test="vo.fromdate!=null and vo.fromdate!=''">
+				and paydate &gt;= #{vo.fromdate}
+	  </if>
+	  <if test="vo.todate!=null and vo.todate!=''">
+				and paydate &lt;= #{vo.todate}
+	  </if>      
+	</select>
+	
+	<!-- 根据用户Id查询租金收入信息 -->
+	<select id="getIncomeByUserId" parameterType="QueryVo" resultMap="QueryPaidMap">
+	   SELECT * FROM `paid` p 
+       left join `userList` u on p.user_id = u.user_id
+       where p.master_id = #{userId}
+       and p.status = "已缴纳"
+	  <if test="fromdate!=null and fromdate!=''">
+				and paydate &gt;= #{fromdate}
+	  </if>
+	  <if test="todate!=null and todate!=''">
+				and paydate &lt;= #{todate}
+	  </if>       
+	</select>
+	
+	<!-- 根据QueryVo查询用户退回的租金 -->
+	<select id="getPaidBackListByQueryVo" resultMap="QueryPaidMap2" parameterType="QueryVo">	
+	   select p.id,p.item_number,p.item_name,p.price,p.paydate,p.user_id,p.master_id,p.status,
+       u.user_name,u.phone,
+       u2.user_name as master_name,u2.phone as master_phone
+       from `paid` p left join `userList` u on p.user_id = u.user_id
+       left join `userList` u2 on p.master_id = u2.user_id
+       where p.user_id = #{userId}
+       and p.status = "租金退回"
+       <if test="fromdate!=null and fromdate!=''">
+				and p.paydate &gt;= #{fromdate}
+	   </if>
+	   <if test="todate!=null and todate!=''">
+				and p.paydate &lt;= #{todate}
+	   </if>
+
+	</select>
+	
+	<!-- 根据物品编号唯一查到一条支付信息 -->
+	<select id="getPaidByOrderNumber" parameterType="Integer" resultMap="BaseResultMap">
+	   select * from `paid` where id=#{orderNumber}
+       and status="已缴纳"	
+	</select>
+	
+	<!-- 查询所有已缴纳的租金信息 -->
+	<select id="getAllPaidRent"  parameterType="QueryVo" resultMap="QueryPaidMap">
+	   select p.id,p.item_number,p.item_name,p.price,p.paydate,p.user_id,p.master_id,p.status,
+       u.user_name,u.phone,
+       u2.user_name as master_name,u2.phone as master_phone
+       from `paid` p left join `userList` u on p.user_id = u.user_id
+       left join `userList` u2 on p.master_id = u2.user_id
+       where p.status = "已缴纳"
+       <if test="fromdate!=null and fromdate!=''">
+				and p.paydate &gt;= #{fromdate}
+	   </if>
+	   <if test="todate!=null and todate!=''">
+				and p.paydate &lt;= #{todate}
+	   </if>	
+	</select>	
+</mapper>

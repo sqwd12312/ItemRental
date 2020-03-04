@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 别名 -->
+    <typeAliases>
+        <package name="com.qny.pojo"/>
+    </typeAliases>
+    
+    <mappers>
+    	<mapper resource="com/qny/dao/mapper/ApplyMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/ApplyoutMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/CheckoutMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/HetongMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/ItemMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/PaidMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/ScheduleMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/SolveMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/TopaidMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/UserlistMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/UserMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/WrongMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/ZulistMapper.xml"/>
+    	<mapper resource="com/qny/dao/mapper/EvaluationMapper.xml"/>
+    </mappers>
+</configuration>

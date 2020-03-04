@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.UserlistMapper">
+	<resultMap id="applyResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<collection property="apply" ofType="Apply">
+			<id property="id" column="apply_id" />
+			<result property="itemId" column="itemId" />
+			<result property="itemName" column="name" />
+			<result property="price" column="price" />
+			<result property="status" column="status" />
+			<result property="fromDate" column="fromdate" />
+			<result property="toDate" column="todate" />
+			<result property="masterName" column="chuzuName" />
+			<result property="masterPhone" column="chuzuPhone" />
+			<result property="itemNumber" column="item_number" />						
+		</collection>		
+	</resultMap>
+	
+	<resultMap id="UserlistResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="balance" property="balance" jdbcType="INTEGER" />		
+	</resultMap>
+	
+	<resultMap id="zuResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<collection property="zulist" ofType="Zulist">
+			<id property="zid" column="zid" />
+			<!--用户id已经在user对象中存在，此处可以不设置 -->
+			<!-- <result property="userId" column="id"/> -->
+			<result property="itemId" column="item_id" />
+			<result property="itemName" column="name" />
+			<result property="contract_id" column="contract_id" />
+			<result property="price" column="price" />
+			<!-- <result property="status" column="status"/> -->
+		</collection>
+
+	</resultMap>
+	<resultMap id="checkoutResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<collection property="checkout" ofType="Checkout">
+			<id property="id" column="cid" />
+			<!--用户id已经在user对象中存在，此处可以不设置 -->
+			<!-- <result property="userId" column="id"/> -->
+			<result property="itemId" column="item_id" />
+			<result property="itemName" column="item_name" />
+			<result property="userlist_id" column="userlist_id" />
+			<result property="status" column="status" />
+		</collection>
+
+	</resultMap>
+	
+	<resultMap id="applyoutResultMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<collection property="applyout" ofType="Applyout">
+			<id property="id" column="aoid" />
+			<!--用户id已经在user对象中存在，此处可以不设置 -->
+			<!-- <result property="userId" column="id"/> -->
+			<result property="itemId" column="item_id" />
+			<result property="itemName" column="item_name" />
+			<result property="userlist_id" column="userlist_id" />
+			<result property="status" column="status" />
+		</collection>
+	</resultMap>
+	
+	<resultMap id="userMap" type="Userlist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<association property="user" javaType="User">
+			<!-- column:user表的主键对应的列 property：user对象中id属性 -->
+			<id column="id" property="id" />
+			<result column="username" property="username" />
+			<result column="password" property="password" />			
+		</association>
+	</resultMap>
+	
+	<resultMap id="checkoutMap" type="Checkout">
+		<id column="cid" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+		<result column="eva_status" property="evaStatus" jdbcType="VARCHAR" />
+		<association property="userlist" javaType="Userlist">
+			<!-- column:user表的主键对应的列 property：user对象中id属性 -->
+			<id column="id" property="id" />
+			<result column="user_name" property="name" />
+			<result column="phone" property="phone" />			
+		</association>
+	</resultMap>
+
+
+	<delete id="deleteuser" parameterType="Integer">
+		delete from user where
+		id=#{id}
+	</delete>
+	<delete id="deleteuserlist" parameterType="Integer">
+		delete from userlist
+		where user_id=#{id}
+	</delete>
+	<select id="findalluserlist" resultMap="userMap">
+		SELECT
+		u.*, ul.*
+		FROM
+		`user` u
+		, userlist ul where u.id = ul.user_id and u.type='zuke'
+	</select>
+	
+	<!-- 根据用户Id查询用户详细信息  -->
+	<select id="findhasuserlist" parameterType="Integer" resultMap="UserlistResultMap">
+		select * from userlist where user_id=#{user_id}
+	</select>
+	
+	<!-- 根据userListId查询用户详细信息  -->
+	<select id="findDetailByUserList" parameterType="Integer" resultMap="UserlistResultMap">
+		select * from userlist where id=#{userList}
+	</select>
+
+	<select id="checkuserlist" parameterType="String"
+		resultType="Userlist">
+		select * from userlist where idcard=#{idcard}
+	</select>
+	<insert id="insertuserlist" parameterType="Userlist">
+		insert into
+		userlist(user_name,idcard,phone,user_id)
+		values(#{name},#{idcard},#{phone},#{user_id})
+	</insert>
+	<select id="finduserlistupdate" parameterType="Userlist"
+		resultType="Userlist">
+		select * from userlist where idcard=#{idcard} and id!=#{id}
+	</select>
+	<update id="updateuserlist" parameterType="Userlist">
+		update userlist set
+		user_name=#{name},idcard=#{idcard},phone=#{phone},balance=#{balance}
+		where id=#{id}
+	</update>
+	
+	<select id="getUserzuList" resultMap="zuResultMap" parameterType="Integer">
+		SELECT
+		u.*, z.*
+		FROM
+		`userlist` u
+		, zulist z where u.id =
+		z.userlist_id and u.id=#{id}
+	</select>
+	
+	<!-- 根据租客的userId查询租客的已退租商品 -->
+	<select id="getMyCheckout" resultMap="checkoutMap" parameterType="Integer">
+       select c.*,i.*,u.* from `checkout` c 
+       left join `item` i on c.item_number= i.item_number
+       left join `userList` u on c.master_id = u.user_id
+       where c.user_id = #{userId}
+	</select>
+	
+	<!-- 根据userId查询租客所有申请 -->
+	<select id="getmyapply" resultMap="applyResultMap" parameterType="Integer">
+      select a.apply_id,a.item_number,a.`status`,u.user_name,i.`name`,
+      i.price,i.itemId,a.fromdate,a.todate,u2.user_name as chuzuName,
+      u2.phone as chuzuPhone
+      from `apply` a 
+      left join `userlist` u on a.user_id = u.user_id
+      left join `item` i on a.item_number = i.item_number
+      left join `userlist` u2 on i.master_id = u2.user_id
+      where a.user_id = #{userId}
+	</select>
+	
+
+	
+	<!-- 根据userList中的id查询出对应用户的申请结果 -->
+	<select id="getmyapplyout" resultMap="applyoutResultMap"
+		parameterType="Integer">
+		SELECT
+		u.*, a.*
+		FROM
+		`userlist` u
+		, applyout a where u.id =
+		a.userlist_id and u.id=#{id}
+	</select>
+</mapper>

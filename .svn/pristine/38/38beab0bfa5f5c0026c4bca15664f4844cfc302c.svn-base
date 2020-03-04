@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 别名 -->
+    <typeAliases>
+        <package name="com.qst.pojo"/>
+    </typeAliases>
+    
+    <mappers>
+    	<mapper resource="com/qst/dao/mapper/ApplyMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/ApplyoutMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/CheckoutMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/HetongMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/ItemMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/PaidMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/ScheduleMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/SolveMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/TopaidMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/UserlistMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/UserMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/WrongMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/ZulistMapper.xml"/>
+    	<mapper resource="com/qst/dao/mapper/EvaluationMapper.xml"/>
+    </mappers>
+</configuration>

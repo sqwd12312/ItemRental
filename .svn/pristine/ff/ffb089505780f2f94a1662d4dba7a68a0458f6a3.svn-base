@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.HetongMapper">
+	<resultMap id="BaseResultMap" type="Hetong">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="chuzu" property="chuZu" jdbcType="VARCHAR" />
+		<result column="chuzu_idcard" property="chuZuIdcard" jdbcType="VARCHAR" />
+		<result column="zuke" property="zuKe" jdbcType="VARCHAR" />
+		<result column="zuke_idcard" property="zuKeIdcard" jdbcType="VARCHAR" />
+		<result column="fromdate" property="fromDate" jdbcType="VARCHAR" />
+		<result column="todate" property="toDate" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />		
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />		
+		<result column="itemid" property="itemId" jdbcType="VARCHAR" />		
+		<result column="payday" property="payDay" jdbcType="INTEGER" />		
+		<result column="total_price" property="totalPrice" jdbcType="INTEGER" />
+		<result column="zuke_id" property="zuKeId" jdbcType="INTEGER" />
+		<result column="chuzu_id" property="chuZuId" jdbcType="INTEGER" />
+		<result column="phone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />		
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="Hetong">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="chuzu" property="chuZu" jdbcType="VARCHAR" />
+		<result column="chuzu_idcard" property="chuZuIdcard" jdbcType="VARCHAR" />
+		<result column="zuke" property="zuKe" jdbcType="VARCHAR" />
+		<result column="zuke_idcard" property="zuKeIdcard" jdbcType="VARCHAR" />
+		<result column="fromdate" property="fromDate" jdbcType="VARCHAR" />
+		<result column="todate" property="toDate" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />		
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />		
+		<result column="itemid" property="itemId" jdbcType="VARCHAR" />		
+		<result column="payday" property="payDay" jdbcType="INTEGER" />		
+		<result column="total_price" property="totalPrice" jdbcType="INTEGER" />
+		<result column="zuke_id" property="zuKeId" jdbcType="INTEGER" />
+		<result column="chuzu_id" property="chuZuId" jdbcType="INTEGER" />
+		<result column="masterPhone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="zuKePhone" property="zuKePhone" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />		
+	</resultMap>	
+
+	<resultMap id="ApplyResultMap" type="Hetong">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="username" property="chuZu" jdbcType="VARCHAR" />
+		<result column="user_name" property="zuKe" jdbcType="VARCHAR" />
+		<result column="idcard" property="zuKeIdcard" jdbcType="VARCHAR" />
+		<result column="fromdate" property="fromDate" jdbcType="VARCHAR" />
+		<result column="todate" property="toDate" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />		
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />		
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />				
+		<result column="total_price" property="totalPrice" jdbcType="INTEGER" />
+		<result column="user_id" property="zuKeId" jdbcType="INTEGER" />
+		<result column="master_id" property="chuZuId" jdbcType="INTEGER" />
+		<result column="masterphone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />		
+	</resultMap>
+	
+	<select id="findhetong" parameterType="String" resultMap="BaseResultMap">
+		select * from hetong where itemid=#{itemId}
+	</select>
+	<insert id="inserthetong" parameterType="Hetong">
+		insert into
+		hetong(itemid,item_name,payday,price,
+		       chuzu,chuzu_idcard,zuke,zuke_idcard,fromdate,
+		       todate,total_price,zuke_id,chuzu_id,item_number)
+		values(#{itemId},#{itemName},#{payDay},#{price},#{chuZu},
+		       #{chuZuIdcard},#{zuKe},#{zuKeIdcard},#{fromDate},#{toDate},
+		       #{totalPrice},#{zuKeId},#{chuZuId},#{itemNumber})
+	</insert>
+	<update id="updatehetong" parameterType="Hetong">
+		update hetong set
+		address=#{address},payday=#{payday},price=#{price},chuzu=#{chuzu},chuzu_idcard=#{chuzu_idcard},
+		zuke=#{zuke},zuke_idcard=#{zuke_idcard},fromdate=#{fromdate},todate=#{todate}
+		where house_id=#{house_id}
+	</update>
+	
+	<!-- 根据物品的itemId删除合同 -->
+	<delete id="deletehetong" parameterType="String">
+		delete from
+		hetong where itemid=#{itemId}
+	</delete>
+	
+	<!-- 根据itemId查询某个商品的申请 -->
+	<select id="getApplyByItemId" resultMap="ApplyResultMap" parameterType="Integer">
+		SELECT
+		u.*, a.*,i.*,r.*,r.phone as masterphone
+		FROM
+		`userlist` u
+		, apply a
+		, `item` i
+		, `user` r
+		where u.user_id = a.user_id and a.item_id = i.itemid 
+		and i.master_id = r.id and a.item_id=#{itemId} and a.`status`="申请中"
+	</select>
+	
+	<!-- 根据租客的userId查询自己的在租列表 -->
+	<select id="getHetongByUserId" resultMap="BaseResultMap" parameterType="Integer">
+       select h.*,u.* from hetong h,userList u 
+       where h.chuzu_id = u.user_id and h.zuke_id=#{userId}
+	</select>
+	
+	<!-- 查询所有的在租列表 -->
+	<select id="getAllHetong" resultMap="BaseResultMap2" parameterType="Integer">
+       select h.*,u.*,u.phone as zuKePhone,r.*,r.phone as masterPhone
+       from hetong h,userList u,user r 
+       where h.zuke_id = u.user_id and h.chuzu_id = r.id   
+	</select>
+	
+	<!-- 租客查询所有的出租列表 -->
+	<select id="getAllHetongByzuke" resultMap="BaseResultMap2" parameterType="Integer">
+       select h.*,u.*,u.phone as zuKePhone,r.*,r.phone as masterPhone
+       from hetong h,userList u,user r 
+       where h.zuke_id = u.user_id
+       and h.chuzu_id = r.id
+       and h.chuzu_id = #{userId}   
+	</select>
+	
+	<!-- 根据商品的itemId查询商品合同 -->
+	<select id="getHetongByItemId" resultMap="BaseResultMap" parameterType="Integer">
+       select h.*,u.* from hetong h,userList u 
+       where h.chuzu_id = u.user_id and h.itemid=#{itemId}
+	</select>	
+</mapper>

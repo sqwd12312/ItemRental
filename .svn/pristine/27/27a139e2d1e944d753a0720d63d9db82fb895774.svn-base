@@ -1,0 +1,133 @@
+package com.qst.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.qst.dao.ApplyoutMapper;
+import com.qst.dao.CheckoutMapper;
+import com.qst.dao.HetongMapper;
+import com.qst.dao.ItemMapper;
+import com.qst.pojo.Applyout;
+import com.qst.pojo.Checkout;
+import com.qst.pojo.Hetong;
+import com.qst.pojo.Item;
+import com.qst.service.ApplyoutService;
+
+@Service
+@Transactional
+public class ApplyoutServiceImpl implements ApplyoutService {
+
+	@Autowired
+	private ApplyoutMapper applyoutMapper;
+	@Autowired
+	private ItemMapper itemMapper;
+	@Autowired
+	private HetongMapper hetongMapper;
+	@Autowired
+	private CheckoutMapper checkoutMapper;
+
+
+	@Override
+	public void insertapplyout(Hetong hetong) {
+		Applyout applyout = new Applyout();
+		applyout.setItemId(hetong.getItemId());
+		applyout.setItemName(hetong.getItemName());
+		applyout.setStatus("申请中");
+		applyout.setUserId(Integer.parseInt(hetong.getZuKeId()));
+		applyout.setMasterId(Integer.parseInt(hetong.getChuZuId()));
+		applyout.setItemNumber(hetong.getItemNumber());
+		applyoutMapper.insertapplyout(applyout);
+
+	}
+
+	//qny
+	//查询所有退租申请
+	@Override
+	public List<Applyout> getAllApplyOut() {
+		List<Applyout> list = applyoutMapper.getAllApplyOut();
+		return list;
+	}
+
+	@Override
+	public void updateapplyout(Applyout applyout) {
+		applyoutMapper.updateapplyout(applyout);
+	}
+
+	/**
+	* @author:  qny
+	* @methodsName: agreeapplyout
+	* @description: 同意一件物品的退租申请
+	* @param:  itemId: 退租物品的id
+	* @return: 
+	* @throws: 
+	*/
+	@Override
+	public void agreeapplyout(Integer itemId) {
+		Applyout applyout = applyoutMapper.getApplyOutByItemId(itemId);
+		//1.为了支付表根据itemId查询订单的唯一性
+		//这里更新商品Id，通过删除再插入的形式实现
+		Item item = itemMapper.findItemId(applyout.getItemId());
+		itemMapper.deleteItem(itemId);
+		item.setStatus("未租赁");
+		item.setItemId(0);
+		itemMapper.insertItem(item);
+		//2.填充退租信息并插入退租表
+		Checkout checkout = new Checkout();
+		checkout.setItemId(applyout.getItemId());
+		checkout.setItemName(applyout.getItemName());
+		checkout.setStatus("已退租");
+		checkout.setUserId(applyout.getUserId());
+		checkout.setMasterId(item.getMasterId());
+		checkout.setItemNumber(item.getItemNumber());
+		checkoutMapper.insertcheckout(checkout);
+		//3.更新退租申请
+		applyout.setStatus("已同意");
+		applyoutMapper.updateApplyoutByItem(applyout);
+		//4.删除租赁合同
+		hetongMapper.deletehetong(applyout.getItemId());
+	}
+
+	//qny
+	//根据物品itemNumber删除已处理的退租申请
+	@Override
+	public void deleteapplyout(Integer aoid) {
+		applyoutMapper.deleteapplyout(aoid);
+	}
+
+	@Override
+	public List<Applyout> getMyApplyOutByUserId(Integer userId) {
+		return applyoutMapper.getMyApplyOutByUserId(userId);
+	}
+
+	//qny
+	//根据物品itemId查询退租申请
+	@Override
+	public Applyout getApplyOutByItemId(Integer itemId) {
+		return applyoutMapper.getApplyOutByItemId(itemId);
+	}
+
+	//qny
+	//更新退租申请的状态
+	@Override
+	public void updateApplyoutByItem(Applyout applyout) {
+		applyoutMapper.updateApplyoutByItem(applyout);
+		
+	}
+
+	@Override
+	public void updateApplyoutStatusByItem(Applyout applyout, String itemId) {
+		applyoutMapper.updateApplyoutStatusByItem(applyout, itemId);
+		
+	}
+
+	//qny
+	//用户查看自己物品的所有退租申请
+	@Override
+	public List<Applyout> getAllApplyOutByZuke(Integer userId) {
+		return applyoutMapper.getAllApplyOutByZuke(userId);
+	}
+
+}

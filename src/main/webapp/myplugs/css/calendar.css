@@ -1,0 +1,32 @@
+﻿.jqcalendar
+{
+    border-width:1px;
+    border-style:solid;
+    width:300px;
+    position:absolute;
+}
+.jqtbcalendar
+{
+    width:100%;
+}
+.jqtbcalendar thead
+{
+    font-size:14px;
+}
+.jqtbcalendar td,.jqtbcalendar th
+{
+    border-width:1px;
+    border-style:solid;
+    border-top-width:0px;
+    text-align:center; 
+    padding:5px 0px;
+}
+.calendarbody td
+{
+    cursor:pointer;
+}
+
+.preMonth, .nextMonth
+{
+    cursor:pointer;
+}

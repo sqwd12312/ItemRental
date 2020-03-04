@@ -1,0 +1,214 @@
+﻿/*********************zy.table style********************/
+.table {
+    border-color:#DDD;
+}
+.table thead tr {
+    color: #707070;
+    background:linear-gradient(to bottom, #F8F8F8 0px, #ECECEC 100%);
+}
+.table thead tr th {
+    border-color:#DDD;
+    color:#707070;
+}
+.table tbody tr td {
+    border-color:#DDD;
+}
+/*奇数行*/
+.table tbody tr:nth-child(2n+1) {
+    background-color:#F5F5F5;
+}
+.table tbody tr:hover {
+    background-color:#f9f9f9;
+}
+
+
+
+/*********************zy.form style********************/
+input[type="text"],input[type="password"] {
+    background-color:#fff;
+    border-color:#D5D5D5;
+}
+input[type="text"]:hover, input[type="password"]:hover {
+    border-color:#B5B5B5;
+}
+input[type="text"]:focus,input[type="password"]:focus {
+    border-color: #F59942;
+}
+input[type="button"], input[type="submit"], .confirmbtnok, .alertbtnok,.link_button {
+    background-color:#6FB3E0 !important;
+    border-color:#6FB3E0 !important;
+    color: #fff !important;
+}
+.alertbtnok:hover, .confirmbtnok:hover, input[type="button"]:hover, input[type="submit"]:hover,.link_button:hover {
+    background-color: #4F99C6 !important;
+}
+.confirmbtncancel {
+    background-color:rgb(171, 186, 195) !important;
+    border-color:rgb(171, 186, 195) !important;
+    color: #fff !important;
+}
+.confirmbtncancel:hover
+{
+    background-color:rgb(139, 154, 163) !important;
+}
+select {
+    border-color:#DDDDDD;
+}
+select:focus {
+    border-color:#F59942;
+}
+
+.editbtn {
+    background-color:#87b87f !important;
+}
+.editbtn:hover {
+    background-Color:#629b58 !important;
+}
+.deletebtn {
+    background-color:#d15b47 !important;
+}
+.deletebtn:hover {
+    background-Color:#b74635 !important;
+}
+
+/*********************zy.pageRecord style********************/
+.dvpagerecord {
+    background-color: #EAEFF2;
+    border-color:#D9D9D9;
+    color: #2283C5;
+}
+.ulpageRecord li {
+    background-color: #EAEFF2;
+    color: #2283C5;
+    border-color:#D9D9D9;
+}
+.currentPage {
+    background-color: #6FAED9 !important;
+    color:white !important;
+}
+
+
+
+/*********************zy.dialog style********************/
+.theme-popover-mask {
+    background:#000;
+}
+
+.jq_dvconfirm {
+    box-shadow: 0px 0px 5px #BCD4E5;
+    background-Color:#fff;
+    border-color:rgba(0, 0, 0, 0.2) !important;
+}
+
+.btncloseconfirm {
+    color: rgb(0, 0, 0);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    background-color:transparent;
+}
+.dvconfirmmessage {
+    color: rgb(57, 57, 57);
+}
+
+.dvconfirmcontent {
+    background-color: rgb(239, 243, 248);
+}
+
+
+.jq_dvalert {
+    box-shadow: 0px 0px 5px #BCD4E5;
+    background-Color:#fff;
+    border-color:rgba(0, 0, 0, 0.2);
+}
+
+.btnclosealert {
+    color: rgb(0, 0, 0);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    background-color:transparent;
+}
+
+.dvalertmessage {
+    color: rgb(57, 57, 57);
+}
+
+.dvalertcontent {
+    background-color:rgb(239, 243, 248);
+}
+
+.jq_dvloading {
+    background-Color:#fff;
+    box-shadow: 0px 0px 5px #BCD4E5;
+    border-color:rgba(0, 0, 0, 0.2);
+}
+
+
+.dvloadingcontent {
+    color: rgb(57, 57, 57);
+}
+
+
+.jq_dvnotifation {
+    box-shadow: 0px 0px 5px #BCD4E5;
+    background-Color:#fff;
+    border-color:rgba(0, 0, 0, 0.2);
+}
+
+
+.jq_dvnotifation_title {
+    background-color:#ECF2F7 !important;
+    border-bottom-color:#BCD4E5 !important;
+}
+
+.btnclosenotifation {
+    color: rgb(0, 0, 0);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    background-color:transparent;
+}
+
+
+.jq_dvpanel {
+    box-shadow: 0px 0px 5px #BCD4E5;
+    background-Color:#fff;
+    border-color:rgba(0, 0, 0, 0.2);
+}
+
+.dvpaneltitle {
+    background-color:rgb(239, 243, 248);
+}
+
+.dvpaneltitlemessage {
+    color: rgb(57, 57, 57);
+}
+
+
+/*********************zy.tabs style********************/
+.tabs {
+    border-color:#ddd;
+}
+.tabs .tabsheader {
+    background-color:#6FB3E0;
+    color:white;
+}
+.currenttab {
+    background-color:#fff;
+    color:black;
+}
+
+/*******************zy.calendar   style*****************/
+.jqcalendar
+{
+    border-color:#ddd;
+    background-color:#fff;
+}
+.jqtbcalendar td, .jqtbcalendar th
+{
+    border-color:#ddd;
+}
+.currentdt
+{
+    background-color: #ddd !important;
+}
+.tddtcalendar:hover
+{
+    background-color: #6FB3E0 !important;
+    color:white;
+}

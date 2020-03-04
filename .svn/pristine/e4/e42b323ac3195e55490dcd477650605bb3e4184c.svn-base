@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.ItemMapper">
+	<resultMap id="BaseResultMap" type="Item">
+		<id column="itemId" property="itemId" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="Item">
+		<result column="itemId" property="itemId" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="master_id" property="masterId" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select * from item
+		<where>
+			<if test="itemId!=null and itemId!=''">
+				and itemId=#{itemId}
+			</if>
+			<if test="price!=null and price!=''">
+				and price=#{price}
+			</if>
+			<if test="status!=null and status!=''">
+				and status=#{status}
+			</if>
+		</where>
+
+	</select>
+	
+	<!-- 根据masterId查询物品列表 -->
+	<select id="getItemListByMasterId" parameterType="Integer" resultMap="BaseResultMap">
+		select * from item
+		<where>
+			<if test="masterId!=null and masterId!=''">
+				and master_id=#{masterId}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="findItemListByVoCount" parameterType="QueryVo"
+		resultType="int">
+		select count(*)
+		from item
+		<where>
+
+			<if test="itemId!=null and itemId!=''">
+				and itemId=#{itemId}
+			</if>
+			<if test="address!=null and address!=''">
+				and address=#{address}
+			</if>
+			<if test="note!=null and note!=''">
+				and note=#{note}
+			</if>
+			<if test="price!=null and price!=''">
+				and price=#{price}
+			</if>
+			<if test="status!=null and status!=''">
+				and status=#{status}
+			</if>
+		</where>
+	</select>
+	<select id="findId" parameterType="Integer" resultMap="BaseResultMap2">
+		select * from item where itemId=#{itemId}
+	</select>
+	
+	<!-- 根据itemId查询物品 -->
+	<select id="findItemId" parameterType="String" resultMap="BaseResultMap2">
+		select * from item where itemId=#{itemId}
+	</select>
+	
+	<select id="findItemIdUpdate" parameterType="Item"
+		resultType="Item">
+		select * from item where itemId=#{itemId} 
+	</select>
+	
+	<!-- 根据商品Id得到商品主人的Id -->
+	<select id="getMasterIdByItemId" parameterType="Integer" resultType="Integer">
+		SELECT master_id FROM `item` where itemId=#{itemId}
+	</select>
+	
+	<!-- 更新物品 -->
+	<update id="updateItem" parameterType="Item">
+		update item set
+		itemId=#{itemId},name=#{name},note=#{note},
+		price=#{price},status=#{status},master_id=#{masterId}
+		where itemId=#{itemId}
+	</update>
+	<update id="updateItemStatus" parameterType="Item">
+		update item
+		set status=#{status}
+		where itemId=#{itemId}
+	</update>
+	<update id="updateStatus" parameterType="Item">
+		update item set
+		status=#{status}
+		where itemId=#{itemId}
+	</update>
+	
+	<!-- 根据item更新物品状态 -->
+	<update id="updateStatusByItem" parameterType="Item">
+		update item set
+		status=#{status}
+		where itemId=#{itemId}
+	</update>
+	
+	<!-- 添加物品 -->
+	<insert id="insertItem" parameterType="Item">
+		insert into item(itemId,name,note,price,status,
+		                 master_id,item_number)
+		values(#{itemId},#{name},#{note},#{price},#{status},
+		       #{masterId},#{itemNumber})
+	</insert>
+
+	<delete id="deleteItem" parameterType="Integer">
+		delete from
+		item where itemId=#{itemId}
+	</delete>
+	<delete id="deleteItemByItemId" parameterType="String">
+		delete
+		from item where itemId=#{itemId}
+	</delete>
+	
+	<!-- 根据物品编号查询物品 -->
+	<select id="getItemByItemNumber" parameterType="String" resultMap="BaseResultMap2">
+		SELECT * FROM `item` where item_number = #{itemNumber}
+	</select>
+		
+</mapper>

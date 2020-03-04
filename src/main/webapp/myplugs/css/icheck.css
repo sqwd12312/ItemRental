@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.icheckOnColor {
+	background-color: #588aef;
+}
+
+.icheckCloseColor {
+	background-color: #e0aeae;
+}
+
+.icheck {
+	position: relative;
+	color: white;
+	border-radius: 40px;
+	cursor: pointer;
+	position: relative;
+	opacity: 0.8;
+	padding-top: 1px;
+	font-size: 12px;
+}
+
+.icheckOn {
+	position: absolute;
+	float: left;
+	height: 40px;
+	text-align: center;
+	left: 0px;
+}
+
+.icheckbtn {
+	position: absolute;
+	background-color: white;
+	left: 60px;
+	border-radius: 40px;
+	border: 1px solid #cdcdcd;
+}

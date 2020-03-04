@@ -1,0 +1,66 @@
+package com.qst.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.qst.pojo.Paid;
+import com.qst.pojo.QueryPaid;
+import com.qst.pojo.QueryVo;
+@Repository
+public interface PaidMapper {
+	public List<Paid> selectall(QueryVo vo);
+
+	public Double selectsum(QueryVo vo);
+
+	//qny
+	//租客删除已缴纳的租金信息
+	public void deletepaid(Integer id);
+
+	public void insertpaid(Paid paid);
+	
+	//qny
+	//根据租客Id查找已缴纳的租金
+	public List<QueryPaid> getPaidListByUserId(Integer userId);
+	
+	//qny
+	//根据物品id唯一查到一条支付信息
+	public Paid getPaidByItemId(Integer itemId);
+	
+	//qny
+	//根据前端的QueryVo中的起始到截止时间查询数据
+	public List<QueryPaid> getPaidListByTime(QueryVo vo);
+	
+	//qny
+	//根据QueryVo查询用户退回的租金 
+	public List<QueryPaid> getPaidBackListByQueryVo(QueryVo vo);
+	
+	//qny
+	//租客删除已退回的租金信息
+	public void deletePaidBackById(Integer id);
+	
+	//qny
+	//根据用户Id查询共缴纳的租金金额
+	public Integer getAllPriceByUserId(Integer userId);
+	
+	//qny
+	//根据用户Id查询总的退回租金金额
+	public Integer getAllBackPriceByUserId(Integer userId);
+	
+	//qny
+	//根据用户Id查询总的租金收入
+	public Integer getTotalIncome(Integer userId);
+	
+	//qny
+	//根据QueryVo查询租金收入信息
+	public List<QueryPaid> getIncomeByUserId(QueryVo vo);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

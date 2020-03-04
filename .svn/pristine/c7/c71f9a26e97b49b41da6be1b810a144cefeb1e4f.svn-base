@@ -1,0 +1,228 @@
+package com.qst.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.qst.dao.ItemMapper;
+import com.qst.pojo.Apply;
+import com.qst.pojo.Checkout;
+import com.qst.pojo.Hetong;
+import com.qst.pojo.Item;
+import com.qst.pojo.User;
+import com.qst.pojo.Userlist;
+import com.qst.service.ApplyService;
+import com.qst.service.CheckoutService;
+import com.qst.service.HetongService;
+import com.qst.service.ItemService;
+import com.qst.service.UserlistService;
+
+@Controller
+@RequestMapping("/hetong")
+public class HetongController {
+	@Autowired
+	private HetongService hetongService;
+	@Autowired
+	private ItemService itemService;
+	@Autowired
+	private ApplyService applyService;
+	@Autowired
+	private CheckoutService checkoutService;
+	@Autowired
+	private UserlistService userlistService;
+	@Autowired
+	private ItemMapper itemMapper;
+	//qny
+	//新增合同信息，修改房屋列表的状态，从申请列表中删除，增添到租赁列表当中
+	@RequestMapping("/inserthetong")
+	public String inserthetong(Model model, Integer itemId,Hetong hetong,
+			                   HttpSession httpSession) {
+				
+		hetong = hetongService.getApplyByItemId(itemId);
+		//1.拿到itemId,查询masterId
+		Item item = itemService.findItemId(hetong.getItemId());
+		int masterId = item.getMasterId();
+		//2.根据masterId查询出租人身份证
+		Userlist master = userlistService.findhasuserlist(masterId);
+		//3.将出租人身份证写入合同
+		hetong.setChuZuIdcard(master.getIdcard());
+		//4.写入租客UserIistId、出租人UserIistId,新增合同信息
+		hetong.setZuKeId(hetong.getZuKeId());
+		hetong.setChuZuId(item.getMasterId().toString());
+		hetongService.inserthetong(hetong);
+		Hetong hetong1 = hetongService.findhetong(hetong.getItemId());
+		//5.修改物品状态
+		Item item2 = itemService.findItemId(hetong1.getItemId());
+		item2.setStatus("已租赁");
+		itemService.updateItemStatus(item2);
+		//7.更改申请状态
+		Apply apply = new Apply();
+		apply.setItemId(hetong.getItemId());;
+		apply.setStatus("已同意");
+		applyService.updateApplyStatus(apply);
+		//8.查看所有租赁申请
+		model.addAttribute("error", "zusuccess");
+		return "redirect:/findapplylist.action";
+	}
+	
+	//qny
+	//用户同意别人的租赁申请
+	@RequestMapping("/insertHetongByZuke")
+	public String insertHetongByZuke(Model model, Integer itemId,Hetong hetong,HttpSession httpSession) {
+				
+		hetong = hetongService.getApplyByItemId(itemId);
+		//1.拿到itemId,查询masterId
+		Item item = itemService.findItemId(hetong.getItemId());
+		int masterId = item.getMasterId();
+		//2.根据masterId查询出租人身份证
+		Userlist master = userlistService.findhasuserlist(masterId);
+		//3.将出租人身份证写入合同
+		hetong.setChuZuIdcard(master.getIdcard());
+		//4.写入租客UserIistId、出租人UserIistId,新增合同信息
+		hetong.setZuKeId(hetong.getZuKeId());
+		hetong.setChuZuId(item.getMasterId().toString());
+		hetongService.inserthetong(hetong);
+		Hetong hetong1 = hetongService.findhetong(hetong.getItemId());
+		//5.修改物品状态
+		Item item2 = itemService.findItemId(hetong1.getItemId());
+		item2.setStatus("已租赁");
+		itemService.updateItemStatus(item2);
+		//7.从申请列表中删除
+		applyService.deleteByItemId(hetong1.getItemId());
+		//8.查看所有在租商品
+		model.addAttribute("error", "zusuccess");
+		return "redirect:findAllHetongByZuke.action";
+	}	
+
+	@RequestMapping("/seehetong")
+	public String seehetong(String itemId, Model model) {
+		Hetong hetong = hetongService.findhetong(itemId);
+		model.addAttribute("hetong", hetong);
+		model.addAttribute("mainPage", "hetong.jsp");
+		return "admin/main1";
+	}
+
+	@RequestMapping("/updatehetong")
+	public String updatehetong(String house_id, Model model) {
+		Hetong hetong = hetongService.findhetong(house_id);
+		model.addAttribute("hetong", hetong);
+		model.addAttribute("mainPage", "updatehetong.jsp");
+		return "admin/main1";
+	}
+
+	@RequestMapping("/changehetong")
+	public String changehetong(Hetong hetong) {
+		hetongService.updatehetong(hetong);
+
+		return "redirect:/zulist/findzulist.action";
+	}
+	
+	// qny
+	// 停止租赁
+	@RequestMapping("/deletehetong")
+	public String deletehetong(String itemId, Model model) {
+		//1.插入已退租列表
+		Hetong hetong = hetongService.getHetongByItemId(Integer.parseInt(itemId));
+		Checkout checkout = new Checkout();
+		checkout.setItemId(itemId);
+		checkout.setItemName(hetong.getItemName());
+		checkout.setStatus("已退租");
+		checkout.setUserId(Integer.parseInt(hetong.getZuKeId()));
+		checkout.setMasterId(Integer.parseInt(hetong.getChuZuId()));
+		checkout.setItemNumber(hetong.getItemNumber());
+		checkoutService.insertcheckout(checkout);
+		//2.更改物品状态
+		//这里更新商品Id，通过删除再插入的形式实现
+		Item item = new Item();
+	    item = itemMapper.findItemId(hetong.getItemId());
+		itemMapper.deleteItem(Integer.parseInt(itemId));
+		item.setStatus("未租赁");
+		item.setItemId(0);
+		itemMapper.insertItem(item);
+		//3.删除合同
+		hetongService.deletehetong(itemId);
+		//4.跳转到“在租列表”
+		model.addAttribute("error", "checkoutsuccess");
+		return "redirect:/hetong/findAllHetong.action";
+	}
+	
+	//qny
+	//用户停止租赁自己的物品
+	@RequestMapping("/deleteHetongByUser")
+	public String deleteHetongByUser(String itemId, Model model) {
+		//1.插入已退租列表
+		Hetong hetong = hetongService.getHetongByItemId(Integer.parseInt(itemId));
+		Checkout checkout = new Checkout();
+		checkout.setItemId(itemId);
+		checkout.setItemName(hetong.getItemName());
+		checkout.setStatus("已退租");
+		checkout.setUserId(Integer.parseInt(hetong.getZuKeId()));
+		checkout.setMasterId(Integer.parseInt(hetong.getChuZuId()));
+		checkout.setItemNumber(hetong.getItemNumber());
+		checkoutService.insertcheckout(checkout);
+		//2.更改物品状态
+		//这里更新商品Id，通过删除再插入的形式实现
+		Item item = new Item();
+	    item = itemMapper.findItemId(hetong.getItemId());
+		itemMapper.deleteItem(Integer.parseInt(itemId));
+		item.setStatus("未租赁");
+		item.setItemId(0);
+		itemMapper.insertItem(item);
+		//3.删除合同
+		hetongService.deletehetong(itemId);
+		//4.跳转到“在租列表”
+		model.addAttribute("error", "checkoutsuccess");
+		return "redirect:/hetong/findAllHetongByZuke.action";
+		
+	}
+	
+	
+
+	@RequestMapping("/zukeseehetong")
+	public String zukeseehetong(String itemId, Model model) {
+		Hetong hetong = hetongService.findhetong(itemId);
+		model.addAttribute("hetong", hetong);
+		model.addAttribute("mainPage", "showhetong.jsp");
+		return "zuke/main";
+	}
+	
+	// 管理员查看所有在租列表
+	@RequestMapping("/findAllHetong")
+	public String findzulist(Model model, 
+			@RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+		PageHelper.startPage(page, pageSize);
+		List<Hetong> hetongs = hetongService.getAllHetong();
+		PageInfo<Hetong> p = new PageInfo<Hetong>(hetongs);
+		model.addAttribute("p", p);
+		model.addAttribute("hetongs", hetongs);
+		model.addAttribute("mainPage", "zulist.jsp");
+		return "admin/main1";
+	}
+	
+	
+	//qny
+	//用户查看自己的所有出租列表	
+	@RequestMapping("/findAllHetongByZuke")
+	public String findAllHetongByZuke(HttpSession httpSession,Model model, 
+			@RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+		User zuke = (User) httpSession.getAttribute("user");
+		PageHelper.startPage(page, pageSize);
+		List<Hetong> hetongs = hetongService.getAllHetongByzuke(zuke.getId());
+		PageInfo<Hetong> p = new PageInfo<Hetong>(hetongs);
+		model.addAttribute("p", p);
+		model.addAttribute("hetongs", hetongs);
+		model.addAttribute("mainPage", "mychuzulist.jsp");
+		return "zuke/main";
+	}
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.CheckoutMapper">
+	<resultMap id="checkoutResultMap" type="Checkout">
+		<id column="cid" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="userlist_id" property="userlist_id" jdbcType="INTEGER" />
+		<collection property="userlist" ofType="Userlist">
+			<id property="id" column="id" />
+			<!--用户id已经在user对象中存在，此处可以不设置 -->
+			<!-- <result property="userId" column="id"/> -->
+			<result property="name" column="user_name" />
+			<result property="idcard" column="idcard" />
+			<result property="phone" column="phone" />
+			<result property="user_id" column="user_id" />
+		</collection>
+	</resultMap>
+	
+	<resultMap id="checkoutMap" type="Checkout">
+		<id column="cid" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="master_id" property="masterId" jdbcType="INTEGER" />		
+		<result column="user_name" property="zukeName" jdbcType="INTEGER"/>
+		<result column="phone" property="zukePhone" jdbcType="INTEGER"/>
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+		<association property="userlist" javaType="Userlist">
+			<!-- column:user表的主键对应的列 property：user对象中id属性 -->
+			<id column="id" property="id" />
+			<result column="mastername" property="name" />
+			<result column="masterphone" property="phone" />			
+		</association>
+	</resultMap>
+
+	
+	<!-- 插入一条退租信息 -->
+	<insert id="insertcheckout" parameterType="Checkout">
+		insert into
+		checkout(item_id,item_name,status,user_id,master_id,
+		         item_number)
+		values(#{itemId},#{itemName},#{status},#{userId},#{masterId},
+		       #{itemNumber})
+	</insert>
+	
+	<!-- 查询所有退租信息 -->
+	<select id="getallcheckout" resultMap="checkoutMap">
+       select c.*,u.user_name,u.phone,u2.user_name as mastername,u2.phone as masterphone
+       from `checkout` c left join `userList` u on c.user_id = u.user_id
+       left join `userList` u2 on c.master_id = u2.user_id
+	</select>
+	
+	<!-- 用户查看自己物品的已退租列表 -->
+	<select id="getAllCheckoutByUser" parameterType="Integer" resultMap="checkoutMap">
+       select c.*,u.user_name,u.phone,u2.user_name as mastername,u2.phone as masterphone
+       from `checkout` c left join `userList` u on c.user_id = u.user_id
+       left join `userList` u2 on c.master_id = u2.user_id
+       where c.master_id = #{userId}
+	</select>
+	
+	<!-- 根据已退租的信息编号删除已退租信息-->
+	<delete id="deletecheckout" parameterType="Integer">
+		delete from
+		checkout
+		where cid=#{cId}
+	</delete>
+	
+	<!-- 根据已退租的信息编号更新评价状态为“已评价”-->
+	<update id="updateEvaStatusById" parameterType="Integer">
+		update checkout set eva_status = "1"
+        where cid = #{cId}
+	</update>
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qst.dao.ApplyoutMapper">
+	<resultMap id="applyoutResultMap" type="Applyout">
+		<id column="aoid" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		
+		<collection property="userlist" ofType="Userlist">
+			<id property="id" column="id" />
+			<!--用户id已经在user对象中存在，此处可以不设置 -->
+			<!-- <result property="userId" column="id"/> -->
+			<result property="name" column="user_name" />
+			<result property="idcard" column="idcard" />
+			<result property="phone" column="phone" />
+			<result property="user_id" column="user_id" />
+		</collection>
+	</resultMap>
+	
+	<resultMap id="applyoutResultMap2" type="Applyout">
+		<id column="aoid" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="mastername" property="masterName" jdbcType="INTEGER" />
+		<result column="masterphone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="zuke" property="userName" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="applyoutResultMap3" type="Applyout">
+		<id column="aoid" property="id" jdbcType="INTEGER" />
+		<result column="itemId" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="chuzuName" property="masterName" jdbcType="INTEGER" />
+		<result column="chuzuPhone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="INTEGER" />
+		<result column="phone" property="zukePhone" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />	
+	</resultMap>
+	
+	<select id="findbyid" resultMap="applyoutResultMap"
+		parameterType="Integer">
+		select * from applyout where aoid=#{aoid}
+	</select>
+	
+	<!-- 根据物品itemId查询退租申请 -->
+	<select id="getApplyOutByItemId" resultMap="applyoutResultMap" parameterType="Integer">
+		select * from applyout where item_id=#{itemId} and status="申请中"
+	</select>
+	
+	<!-- 查看所有退租申请 -->
+	<select id="getAllApplyOut" resultMap="applyoutResultMap3">
+        select a.aoid,a.`status`,i.itemId,i.`name`as item_name,i.item_number,
+        u.user_name,u.phone,u2.user_name as chuzuName,u2.phone as chuzuPhone 
+        from `applyout` a
+        left join `item` i on a.item_number = i.item_number
+        left join `userList` u on a.user_id = u.user_id
+        left join `userList` u2 on a.master_id = u2.user_id
+	</select>
+	
+	<!-- 用户查看自己物品的所有退租申请 -->
+	<select id="getAllApplyOutByZuke" resultMap="applyoutResultMap3">
+        SELECT h.*,a.*,u.*,t.phone as zuke_phone 
+        FROM `hetong` h,`applyout` a,`user` u,`userlist` t
+        where h.itemid = a.item_id 
+        and h.chuzu_id = u.id 
+        and h.zuke_id = t.user_id
+        and h.chuzu_id = #{userId}
+	</select>
+	
+	<!-- 插入一条申请退租的信息 -->
+	<insert id="insertapplyout" parameterType="Applyout">
+		insert into applyout(item_id,item_name,status,user_id,master_id,
+		                     item_number)
+		values(#{itemId},#{itemName},#{status},#{userId},#{masterId},
+		       #{itemNumber})
+	</insert>
+	
+	<!-- 更新退租申请的状态 -->
+	<update id="updateapplyout" parameterType="Applyout">
+		update applyout set
+		status=#{status}
+		where item_id=#{itemId}
+	</update>
+	
+	<!-- 更新退租申请的状态 -->
+	<update id="updateApplyoutByItem" parameterType="Applyout">
+		update applyout
+		set status=#{status}
+		where item_id=#{itemId}
+	</update>
+	
+	<!-- 更新退租申请的状态 -->
+	<update id="updateApplyoutStatusByItem" parameterType="Applyout">
+		update applyout
+		set status=#{status}
+		where item_id=#{param}
+	</update>
+	
+	<!-- 根据申请编号和status删除退租申请 -->
+	<delete id="deleteapplyout" parameterType="Integer">
+		delete from applyout where aoid=#{aoid} and status!="申请中"
+	</delete>
+	
+	<!-- 根据租客userId查询租客的退租申请 -->
+	<select id="getMyApplyOutByUserId" resultMap="applyoutResultMap2" parameterType="Integer">
+      select a.*,u.*,u2.*,u.user_name as zuke,
+      u2.user_name as mastername,u2.phone as masterphone 
+      from `applyout` a left join `userList` u on a.user_id = u.user_id
+      left join `userList` u2 on a.master_id = u2.user_id
+      where a.user_id=#{userId}
+	</select>
+</mapper>
