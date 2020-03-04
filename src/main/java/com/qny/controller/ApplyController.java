@@ -44,8 +44,6 @@ public class ApplyController {
 	* @return: String: 重定向到user模块下展示该用户全部租赁申请的action
 	* @throws: 
 	*/
-	//qny
-	//写入物品租赁申请
 	@RequestMapping("/InsertItemApply")
 	public String InsertItemApply(HttpSession httpSession, Model model, Apply apply) {
 		User user1 = (User) httpSession.getAttribute("user");

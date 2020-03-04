@@ -26,6 +26,7 @@ public class ApplyoutController {
 	@Autowired
 	private HetongService hetongService;
 
+	//测试gitHub
 	//qny
 	//插入退租信息
 	@RequestMapping("/insertapplyout")
