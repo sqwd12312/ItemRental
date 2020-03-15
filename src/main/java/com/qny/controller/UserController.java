@@ -77,4 +77,64 @@ public class UserController {
 
 		return "admin/index";
 	}
+	
+	/**
+	* @author:  qny
+	* @methodsName: updatePwd
+	* @description: 更新用户密码
+	* @param:  
+	* @return: String: 重定向到user模块下展示该用户全部租赁申请的action
+	* @throws: 
+	*/
+	@RequestMapping("updatePwd")
+	public String updatePwd(Model model,String OriginalPwd,String NewPwd,
+			                String ConfirmPwd,HttpSession httpSession){
+		//1.判断新密码与确认密码是否相同
+		if (!NewPwd.equals(ConfirmPwd)) {
+			model.addAttribute("info", "新密码与确认密码不一致");
+			return "user/updatePwd";
+		}
+		//2.根据id查询密码后与原密码比较看是否相同
+		User user = (User)httpSession.getAttribute("user");
+		Integer id = user.getId();
+		User user2 = userService.getUserById(id);
+		if (!OriginalPwd.equals(user2.getPassword())) {
+			model.addAttribute("info", "原密码不正确");
+			return "user/updatePwd";
+		}
+		//3.更新密码
+		user2.setPassword(NewPwd);
+		userService.updateUser(user2);
+		model.addAttribute("info", "密码更新成功");
+		return "user/updatePwd";
+	}
+	
+	/**
+	* @author:  qny
+	* @methodsName: gotoUpdatePwd
+	* @description: 前往更新用户密码
+	* @param:  
+	* @return: String: 前往更新密码页面
+	* @throws: 
+	*/	
+	@RequestMapping("gotoUpdatePwd")
+	public String gotoUpdatePwd(Model model){
+		return"user/updatePwd";
+	}
+	
+	/**
+	* @author:  qny
+	* @methodsName: adminGotoUpdatePwd
+	* @description: 前往更新管理员密码页面
+	* @param:  
+	* @return: String: 前往更新密码页面
+	* @throws: 
+	*/	
+	@RequestMapping("adminGotoUpdatePwd")
+	public String adminGotoUpdatePwd(Model model){
+		return"admin/updatePwd";
+	}
+	
+	
+	
 }

@@ -12,6 +12,9 @@
 		
 	    <link rel="stylesheet" type="text/css" href="css/nav.css">
         <link rel="stylesheet" type="text/css" href="font/iconfont.css">
+        
+
+
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/nav.js"></script>
         <script type="text/javascript" src="js/jquery.cookie.js"></script>
@@ -32,6 +35,9 @@
 							</dd>
 							<dd>
 								<a href="findhasuserlist.action" target="right">更新基本信息</a>
+							</dd>
+							<dd>
+								<a href="gotoUpdatePwd.action" target="right">更新密码</a>
 							</dd>
 						</dl>
 					</li>
@@ -67,7 +73,7 @@
 			<ul>
 				<li><a href="itemListByZuke.action" target="right"><span>我的物品</span></a></li>
 				<li><a href="toAddItemByZuke.action" target="right"><span>添加物品</span></a></li>
-				<li><a href="getMyApply.action" target="right"><span>申请租赁列表</span></a></li>
+				<li><a href="getMyApply.action" target="right"><span>被租赁申请</span></a></li>
 				<li><a href="hetong/findAllHetongByZuke.action" target="right"><span>出租列表</span></a></li>
 				<li><a href="applyout/findAllApplyoutByZuke.action" target="right"><span>申请退租列表</span></a></li>
 				<li><a href="checkout/getAllCheckoutByUser.action" target="right"><span>已退租列表</span></a></li>			
@@ -91,7 +97,10 @@
 			<a href="javascript:;"><i class="iconfont nav-icon icon_7"></i><span>其他操作</span><i class="my-icon nav-more"></i></a>
 			<ul>
 				<li><a href="myDetails.action" target="right"><span>我的详情</span></a></li>
-				<li><a href="findhasuserlist.action" target="right"><span>更新个人资料</span></a></li>			</ul>
+				<li><a href="findhasuserlist.action" target="right"><span>更新个人资料</span></a></li>			
+				<li><a href="gotoUpdatePwd.action"  target="right"><span>修改密码</span></a></li>			
+									
+			</ul>
 		</li>						
 	</ul>
 </div>
@@ -123,7 +132,7 @@
 					title: title,
 					iframeWidth: 500,
 					iframeHeight: 300,
-					url: "updatePwd.html"
+					url: "updatePwd.jsp"
 				});
 			}
 		</script>

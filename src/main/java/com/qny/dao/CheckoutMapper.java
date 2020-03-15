@@ -22,4 +22,8 @@ public interface CheckoutMapper {
 	//qny
 	//根据已退租的信息编号更新评价状态为“已评价”
 	public void updateEvaStatusById(Integer cId);
+	
+	//qny
+	//批量删除已退租列表
+	public void deleteCheckOutByIds(Integer ids[]);
 }

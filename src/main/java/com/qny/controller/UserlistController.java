@@ -26,7 +26,14 @@ public class UserlistController {
 	private UserService userService;
 
 	
-	
+	/**
+	* @author:  qny
+	* @methodsName: findhasuserlist
+	* @description: 得到用户个人信息并前往更新信息界面
+	* @param:  
+	* @return: String: 前往更新信息界面
+	* @throws: 
+	*/	
 	@RequestMapping("/findhasuserlist")
 	public String findhasuserlist(HttpSession httpSession, Model model) throws Exception {
 		User user1 = (User) httpSession.getAttribute("user");
@@ -37,13 +44,57 @@ public class UserlistController {
 
 	}
 	
+	/**
+	* @author:  qny
+	* @methodsName: updateAdminInfo
+	* @description: 得到管理员个人信息并前往更新信息界面
+	* @param:  
+	* @return: String: 前往更新信息界面
+	* @throws: 
+	*/	
+	@RequestMapping("/updateAdminInfo")
+	public String updateAdminInfo(HttpSession httpSession, Model model) throws Exception {
+		User user1 = (User) httpSession.getAttribute("user");
+		Integer user_id = user1.getId();
+		Userlist userlist = userlistService.findhasuserlist(user_id);
+		model.addAttribute("userlist", userlist);
+		return "admin/updateAdminInfo";
+
+	}
+
+	/**
+	* @author:  qny
+	* @methodsName: myDetails
+	* @description: 用户查看个人信息
+	* @param:  
+	* @return: String: 前往展示用户个人信息的界面
+	* @throws: 
+	*/
 	@RequestMapping("/myDetails")
-	public String myDetails(HttpSession httpSession , Model model){
+	public String getUserDetails(HttpSession httpSession , Model model){
 		User user = (User)httpSession.getAttribute("user");
 		Integer userId = user.getId();
 		Userlist userDetails = userlistService.findhasuserlist(userId);
 		model.addAttribute("userDetails",userDetails);
 		return"user/mydetails";
+		
+	}
+
+	/**
+	* @author:  qny
+	* @methodsName: getAdminDetails
+	* @description: 管理员查看个人信息
+	* @param:  
+	* @return: String: 前往展示管理员个人信息的界面
+	* @throws: 
+	*/
+	@RequestMapping("/adminDetails")
+	public String getAdminDetails(HttpSession httpSession , Model model){
+		User user = (User)httpSession.getAttribute("user");
+		Integer userId = user.getId();
+		Userlist userDetails = userlistService.findhasuserlist(userId);
+		model.addAttribute("userDetails",userDetails);
+		return"admin/mydetails";
 		
 	}
 

@@ -52,6 +52,17 @@ public class CheckoutServiceImpl implements CheckoutService {
 		checkoutMapper.updateEvaStatusById(cId);
 		
 	}
+
+	/**   
+	 * @title: deleteCheckOutByIds
+	 * @description: 用户批量删除已退租列表
+	 * @param ids   列表id数组
+	 * @see com.qny.service.CheckoutService#deleteCheckOutByIds(java.lang.Integer[])     
+	 */ 
+	@Override
+	public void deleteCheckOutByIds(Integer[] ids) {
+		checkoutMapper.deleteCheckOutByIds(ids);
+	}
 	
 
 

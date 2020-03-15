@@ -34,12 +34,6 @@
 	<form id="houseForm" name="houseForm"
 		action="getAllCheckoutByUser.action"
 		method=post >
-						 <div class="result-title">
-                    <div class="result-list">
-                      
-                        
-                    </div>
-                </div>
 
 					<div class="result-content">
 						<table id=grid
@@ -47,6 +41,7 @@
 							<tbody>
 								<tr
 									style="FONT-WEIGHT: bold; FONT-STYLE: normal; BACKGROUND-COLOR: #eeeeee; TEXT-DECORATION: none">
+									
 									<td>物品编号</td>
 									<td>物品名称</td>																		
 									<td>退租人姓名</td>

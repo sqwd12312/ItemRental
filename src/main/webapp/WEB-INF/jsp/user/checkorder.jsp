@@ -76,12 +76,16 @@
 		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">请确定订单正确无误再提交！</strong><small></small></div>
     </div>
 	<hr>
+	
 </div>
+
 <div class="result-content">
         <form action="../InsertItemApply.action" method="post" id="myform" name="myform" enctype="multipart/form-data" >
                     <table class="insert-tab" width="100%">
                         <tbody>
-                           
+                           	<tr>
+                                <font id="info" color="red">${info }</font>
+                            </tr>
                            <tr>
                            
                                 <th><i class="require-red">*</i>物品编号：</th>
@@ -126,9 +130,7 @@
                                     <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
                                 </td>
                             </tr>
-							<tr>
-                                <font id="info" color="red">${info }</font>
-                            </tr>	
+	
                         </tbody></table>
                 </form>
           </div>

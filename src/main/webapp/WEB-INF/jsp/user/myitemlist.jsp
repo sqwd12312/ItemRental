@@ -67,7 +67,9 @@
 											<div class="am-btn-group am-btn-group-xs">
 												<a class="am-btn am-btn-default am-btn-xs am-text-secondary" 
 												   href="zukeToUpdateItem.action?itemId=${item.itemId}"><span class="am-icon-pencil-square-o"></span>更新</a>
-												   &nbsp;&nbsp; &nbsp;&nbsp; 
+												
+		
+												       
 												<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"
 												   href="zukeDeleteItem.action?itemId=${item.itemId}"
 												   onclick="return window.confirm('确定删除吗？')"><span class="am-icon-trash-o"></span> 删除</a>
@@ -128,5 +130,7 @@
 		document.houseForm.submit();
 	}
 </script>
+
+
 </body>
 </html>

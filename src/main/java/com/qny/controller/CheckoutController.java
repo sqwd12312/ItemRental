@@ -109,4 +109,21 @@ public class CheckoutController {
 		model.addAttribute("checkoutList", checkoutList);
 		return "user/mycheckout";
 	}
+
+	/**
+	* @author:  qny
+	* @methodsName: deleteCheckOutByIds
+	* @description: 用户批量删除已退租列表
+	* @param:  ids: 已退租列表的id数组
+	* @return: String: 重定向到查看已退租信息的action
+	* @throws: 
+	*/
+	@RequestMapping("deleteCheckOutByIds")
+	public String deleteCheckOutByIds(Model model,Integer ids[]){
+		if (ids == null || ids.length == 0) {
+			return "redirect:/checkout/getMyCheckout.action";
+		}
+		checkoutService.deleteCheckOutByIds(ids);
+		return "redirect:/checkout/getMyCheckout.action";
+	}
 }

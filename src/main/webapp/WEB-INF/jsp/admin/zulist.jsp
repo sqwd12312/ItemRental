@@ -40,7 +40,7 @@
     </div>
 	<hr>
 </div>
-	<form id="houseForm" name="houseForm" action="hetong/findAllHetong.action" method=post>
+	<form id="houseForm" name="houseForm" action="findAllHetong.action" method=post>
 		   <div class="result-content">
 						<table id=grid  class="result-tab" width="100%">
 							<tbody>

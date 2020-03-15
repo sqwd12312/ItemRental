@@ -41,7 +41,9 @@ public interface UserMapper {
     //更新一条用户信息
     public void updateUser(User user);
     
-    
+    //qny
+    //根据id查询用户
+    public User getUserById(Integer id);   
     
     
     

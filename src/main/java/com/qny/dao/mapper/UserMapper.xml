@@ -236,9 +236,22 @@
     
     <!-- 更新一条用户信息 -->
     <update id="updateUser" parameterType="Userlist">
-		update user set
-		username=#{username},phone=#{phone}
+		update user 
+		<set>
+		<if test="username != null">
+		  username = #{username},
+		</if>
+		<if test="phone != null">
+		  phone = #{phone},
+		</if>
+		<if test="password != null">
+		  password = #{password},
+		</if>
+		</set>
 		where id=#{id}
 	</update>
+	<select id="getUserById" parameterType="Integer" resultType="User">
+	    select * from user where id = #{id}
+	</select>
 	
 </mapper>

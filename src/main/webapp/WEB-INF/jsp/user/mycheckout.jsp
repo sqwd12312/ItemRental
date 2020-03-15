@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../css/main.css"/>
     <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/libs/modernizr.min.js"></script>
+    
 
     <link rel="stylesheet" href="../css2/amazeui.min.css" />
 
@@ -34,14 +35,15 @@
     </div>
 	<hr>
 </div>
-	<form id="houseForm" name="houseForm" action="getMyCheckout.action" method="post" >
-
+	<form id="houseForm" name="houseForm" action="deleteCheckOutByIds.action" method="post" >
+		<input class="btn btn-primary btn6 mr10" value="删除" type="submit" onclick="return window.confirm('确定要删除这些记录吗？')"><br><br>
 					<div class="result-content">
 						<table id=grid
 							class="result-tab" width="100%">
 							<tbody>
 								<tr
 									style="FONT-WEIGHT: bold; FONT-STYLE: normal; BACKGROUND-COLOR: #eeeeee; TEXT-DECORATION: none">									
+									<td align='center'><input type="checkbox" id="checkAll" onclick="checkall()"></td>
 									<td>物品编号</td>
 									<td>物品名称</td>
 									<td>出租人</td>
@@ -52,6 +54,7 @@
 								<c:forEach items="${checkoutList}" varStatus="i" var="list">
 									<tr
 										style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">										
+										<td align='center'><input type="checkbox" name="ids" value="${list.id}"></td>
 										<td>${list.itemNumber}</td>										
 										<td>${list.itemName}</td>
 										<td>${list.userlist.name}</td>
@@ -107,5 +110,21 @@
 		document.houseForm.submit();
 	}
 </script>
+
+<script type="text/javascript">
+    //全选，全不选；方法核心就是让所有的复选框的状态与全选复选框的状态一致
+    function checkall(){
+    var isChecked = (document.houseForm.checkAll.checked == true);//全选框的状态
+    var elements = document.houseForm.elements;//选出所有的元素
+    var counter = elements.length;
+    for(i=0;i<counter;i++){
+        var element = elements[i];
+        if(element.type=="checkbox" & element.name=="ids"){//过滤需要的复选框
+            element.checked=isChecked;//将复选框的状态改为全选框的状态
+        }
+    }
+}
+    </script>
+
 </body>
 </html>

@@ -7,7 +7,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>租赁管理系统</title>
+		<title>物品租赁系统</title>
 		<link rel="stylesheet" href="css2/layui.css">
 		
 	    <link rel="stylesheet" type="text/css" href="css/nav.css">
@@ -20,7 +20,7 @@
 	<body class="layui-layout-body">
 		<div class="layui-layout layui-layout-admin">
 			<div class="layui-header">
-				<div class="layui-logo">租赁管理系统</div>
+				<div class="layui-logo">物品租赁系统</div>
 				<ul class="layui-nav layui-layout-right">
 					<li class="layui-nav-item">
 						<a href="javascript:;">
@@ -28,10 +28,13 @@
 						</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="">基本资料</a>
+								<a href="adminDetails.action" target="right">我的基本信息</a>
 							</dd>
 							<dd>
-								<a href="">安全设置</a>
+								<a href="updateAdminInfo.action" target="right">更新基本信息</a>
+							</dd>
+							<dd>
+								<a href="adminGotoUpdatePwd.action" target="right">更新密码</a>
 							</dd>
 						</dl>
 					</li>

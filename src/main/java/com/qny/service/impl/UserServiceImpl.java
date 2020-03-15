@@ -45,4 +45,17 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	/**   
+	 * @title: getUserById
+	 * @description: 根据id查询用户
+	 * @param id:  用户id
+	 * @return User: 查询到的用户信息 
+	 * @see com.qny.service.UserService#getUserById(java.lang.Integer)     
+	 */ 
+	@Override
+	public User getUserById(Integer id) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserById(id);
+	}
+
 }
