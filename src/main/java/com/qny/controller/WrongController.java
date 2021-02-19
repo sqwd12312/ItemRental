@@ -38,7 +38,7 @@ public class WrongController {
 	// 管理员查找所有已处理的报障
 	@RequestMapping("/selectall")
 	public String selectall(Model model, QueryVo vo, @RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		List<Solve> list = solveService.selectall(vo);
 		PageInfo<Solve> p = new PageInfo<Solve>(list);
@@ -55,7 +55,7 @@ public class WrongController {
 	@RequestMapping("/findmysolve")
 	public String findmysolve(HttpSession httpSession, Model model, QueryVo vo,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		Userlist userlist = userlistService.findhasuserlist(user1.getId());
 
@@ -90,7 +90,7 @@ public class WrongController {
 	@RequestMapping("/showaddwrong")
 	public String showaddwrong(HttpSession httpSession, Model model,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 		User user1 = (User) httpSession.getAttribute("user");
 		Userlist userlist = userlistService.findhasuserlist(user1.getId());
 		PageHelper.startPage(page, pageSize);
@@ -123,7 +123,7 @@ public class WrongController {
 	// 管理员查看所有未处理报障
 	@RequestMapping("/wronglist")
 	public String wronglist(Model model, @RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		QueryVo vo = new QueryVo();
 		PageHelper.startPage(page, pageSize);
 		List<Wrong> list = solveService.findwrong(vo);
@@ -138,7 +138,7 @@ public class WrongController {
 	@RequestMapping("/mywronglist")
 	public String mywronglist(Model model, HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		Userlist userlist = userlistService.findhasuserlist(user1.getId());
 		QueryVo vo = new QueryVo();

@@ -136,7 +136,7 @@ public class UserlistController {
 	@RequestMapping("/findalluserlist")
 	public String findAllUserList(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		List<Userlist> userlist = userlistService.findalluserlist();
 		PageInfo<Userlist> p = new PageInfo<Userlist>(userlist);

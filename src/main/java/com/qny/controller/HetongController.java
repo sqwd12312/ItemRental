@@ -220,7 +220,7 @@ public class HetongController {
 	@RequestMapping("/findAllHetong")
 	public String findZuList(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 		PageHelper.startPage(page, pageSize);
 		//得到所有在租列表的信息
 		List<Hetong> hetongs = hetongService.getAllHetong();
@@ -236,7 +236,7 @@ public class HetongController {
 	@RequestMapping("/findAllHetongByZuke")
 	public String findAllHetongByZuke(HttpSession httpSession,Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 		User zuke = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		List<Hetong> hetongs = hetongService.getAllHetongByzuke(zuke.getId());

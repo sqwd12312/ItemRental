@@ -73,7 +73,7 @@
 
 <div class="admin-content-body">
 	<div class="am-cf am-padding am-padding-bottom-0">
-		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">请确定订单正确无误再提交！</strong><small></small></div>
+		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg" style="color:#F00" >请确认无误再提交，订单提交时默认支付！</strong></div>
     </div>
 	<hr>
 </div>
@@ -116,7 +116,8 @@
                             </tr> 
                             <tr>
                                 <th><i class="require-red">*</i>需交租金：</th>
-                              <td><input class="common-text" name="totalPrice" id="totalPrice" value="${apply.totalPrice}" size="50"  type="text" style="width:200px;"></td>
+                              <td><input class="common-text" name="totalPrice" id="totalPrice" value="${apply.totalPrice}" size="50"  type="text" style="width:200px;"
+                              onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"></td>
                             </tr>                                                       
 								<tr>
                                 <th></th>
@@ -127,7 +128,8 @@
                                 </td>
                             </tr>
 							<tr>
-                                <font id="info" color="red">${info }</font>
+									<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg" style="color:#F00" >${info }</strong></div>
+							
                             </tr>	
                         </tbody></table>
                 </form>

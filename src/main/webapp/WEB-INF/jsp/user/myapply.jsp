@@ -21,7 +21,7 @@
 <script type="text/javascript">
 	var info = "${param.info}";
 	if (info == "applysuccess") {
-		alert("申请已提交。如需查看进度，可前往“租赁申请列表”中查看");
+		alert("申请已提交。如需查看进度，可前往“我的租赁-租赁申请”中查看");
 	}
 </script>
 </head>

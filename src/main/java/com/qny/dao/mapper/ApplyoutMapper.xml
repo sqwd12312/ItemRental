@@ -43,6 +43,18 @@
 		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />	
 	</resultMap>
 	
+	<resultMap id="applyoutResultMap4" type="Applyout">
+		<id column="aoid" property="id" jdbcType="INTEGER" />
+		<result column="itemId" property="itemId" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="chuzuName" property="masterName" jdbcType="INTEGER" />
+		<result column="chuzuPhone" property="masterPhone" jdbcType="INTEGER" />
+		<result column="zuke" property="userName" jdbcType="INTEGER" />
+		<result column="phone" property="zukePhone" jdbcType="INTEGER" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />	
+	</resultMap>
+	
 	<select id="findbyid" resultMap="applyoutResultMap"
 		parameterType="Integer">
 		select * from applyout where aoid=#{aoid}
@@ -64,7 +76,7 @@
 	</select>
 	
 	<!-- 用户查看自己物品的所有退租申请 -->
-	<select id="getAllApplyOutByZuke" resultMap="applyoutResultMap3">
+	<select id="getAllApplyOutByZuke" resultMap="applyoutResultMap4">
         SELECT h.*,a.*,u.*,t.phone as zuke_phone 
         FROM `hetong` h,`applyout` a,`user` u,`userlist` t
         where h.itemid = a.item_id 

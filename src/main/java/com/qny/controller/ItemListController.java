@@ -14,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qny.dao.ItemMapper;
 import com.qny.pojo.Item;
+import com.qny.pojo.QueryItem;
 import com.qny.pojo.User;
 import com.qny.service.ItemService;
 
@@ -34,7 +35,7 @@ public class ItemListController {
 	@RequestMapping("/item")
 	public String getAllItems(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {		
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {		
 		PageHelper.startPage(page, pageSize);
 		List<Item> item = itemService.selectAll();
 		PageInfo<Item> p = new PageInfo<Item>(item);
@@ -55,7 +56,7 @@ public class ItemListController {
 	@RequestMapping("/itemList")
 	public String itemList(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 
 		//设置分页形式
 		PageHelper.startPage(page, pageSize);
@@ -71,12 +72,58 @@ public class ItemListController {
 		
 	}
 	
+	
+	/**
+	* @description: admin组合查询可供租赁的物品
+	*/
+	@RequestMapping("/getItemByCompositeQuery")
+	public String getItemByCQ(
+			Model model,
+			String itemId,
+			String itemName,
+			HttpSession httpSession,
+			@RequestParam(defaultValue = "0.0") double minPrice,
+			@RequestParam(defaultValue = "0.0") double maxPrice,
+			@RequestParam(required = false, defaultValue = "1") Integer page,
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
+
+		QueryItem qItem = new QueryItem();
+		qItem.setItemId(itemId);
+		qItem.setItemName(itemName);
+		qItem.setMaxPrice(maxPrice);
+		qItem.setMinPrice(minPrice);
+		//设置分页形式
+		PageHelper.startPage(page, pageSize);
+		//得到所有可供租赁物品的信息
+		List<Item> item = itemService.getItemByCompositeQuery(qItem);
+		//进行分页
+		PageInfo<Item> p = new PageInfo<Item>(item);
+		User user = (User)httpSession.getAttribute("user");
+		if (user.getType()=="admin") {
+			model.addAttribute("p", p);
+			model.addAttribute("item", item);
+			model.addAttribute("qItem",qItem);
+			return "admin/itemList";
+		}else{
+			model.addAttribute("p", p);
+			model.addAttribute("itemList", item);
+			model.addAttribute("qItem",qItem);
+			return "user/itemList";
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
 	//qny
 	//租客查看自己的出租物品
 	@RequestMapping("/itemListByZuke")
 	public String itemListByZuke(Model model,HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize){
 		
 		User zuke = (User)httpSession.getAttribute("user");
 		PageHelper.startPage(page,pageSize);

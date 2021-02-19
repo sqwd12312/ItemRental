@@ -1,124 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-   
-   <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+    pageEncoding="UTF-8"
 %>
-
-<!--
-	Author: W3layouts
-	Author URL: http://w3layouts.com
-	License: Creative Commons Attribution 3.0 Unported
-	License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
 <html>
-<head>
-<title>物品租赁系统</title>
-<link rel="stylesheet" href="css/style.css">
-
-<link href="css/popup-box.css" rel="stylesheet" type="text/css" media="all" />
-<!--Web-fonts-->
-<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
-<link href="//fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet">
-<!--//Web-fonts-->
-<!-- Meta tag Keywords -->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Striking Dual form  Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- //Meta tag Keywords -->
-</head>
-<body>
-	<h1>物品租赁系统</h1>
-	<div class="w3layouts">
-	<!-- Sign in -->
-		<div class="signin-agile">
-			<h2>Login</h2>
-			<label class="bar-w3-agile"></label>
-			<form action="logincheck.action" method="post">
-				<p>Username</p>
-				<input type="text" name="username" class="name" placeholder="用户名" required="" />
-				<p>Password</p>
-				<input type="password" name="password" class="password" placeholder="密码" required="" />
-				<br>
-				<ul>
-					<li>
-						<input type="checkbox" id="brand1" value="">
-						<label for="brand1"><span></span>Keep me signed in</label>
-					</li>
-				</ul>
-				<a href="#">Forgot Password?</a><br>
-				<div class="clear"></div>				
-				<input type="submit" value="user" name="type">
-				<input type="submit" value="admin" name="type">
-			</form>
-		</div>
-	<!-- //Sign in -->
-	<!-- Sign up -->
-		<div class="signup-agileinfo">
-			<h3>Sign Up</h3>
-			<label class="bar-w3-agile"></label>
-			<p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</p>
-			<h6>By creating an account, you agree to our <a href="#">Terms.</a></h6>
-			<!-- Pop up -->
-				<div class="more">
-					<a class="book popup-with-zoom-anim button-isi zoomIn animated" data-wow-delay=".5s" href="#small-dialog">Sign Up</a>				
-				</div>
-			<!-- //Pop up -->
-		</div>
-	<!-- //Sign up -->
-		<div class="clear"></div>
-	</div>
-	<div class="footer-w3l">
-	</div>
-	<!-- Pop up -->
-	<div class="pop-up"> 
-	<div id="small-dialog" class="mfp-hide book-form">
-		<h3>Sign Up Form </h3>
-			<form action="register.action" method="post">
-				<p>Username</p>
-				<input type="text" name="username" placeholder="" required=""/>
-				<p>Password</p>
-				<input type="password" name="password" class="password" placeholder="" required=""/>
-				<p>IDNumber</p>
-				<input type="text" name="idcard" placeholder="" required=""/>
-				<p>Phone</p>
-				<input type="text" name="phone" placeholder="" required=""/>
-				<input type="submit" value="Sign Up">
-			</form>
-	</div>
-</div>	
-<!-- // Pop up -->
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/modernizr.custom.53451.js"></script> 
- <script>
-						$(document).ready(function() {
-						$('.popup-with-zoom-anim').magnificPopup({
-							type: 'inline',
-							fixedContentPos: false,
-							fixedBgPos: true,
-							overflowY: 'auto',
-							closeBtnInside: true,
-							preloader: false,
-							midClick: true,
-							removalDelay: 300,
-							mainClass: 'my-mfp-zoom-in'
-						});
-																						
-						});
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>物品租赁系统-登录</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+  </head>
+  <body>
+    <div class="page login-page">
+      <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+          <div class="row">
+            <!-- Logo & Information Panel-->
+            <div class="col-lg-6">
+              <div class="info d-flex align-items-center">
+                <div class="content">
+                  <div class="logo">
+                    <h1>欢迎登录物品租赁系统</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Form Panel -->
+            <div class="col-lg-6 bg-white">
+              <div class="form d-flex align-items-center">
+                <div class="content">
+                  <form method="post" action="logincheck.action" class="form-validate" id="loginFrom">
+                    <div class="form-group">
+                      <input id="login-username" type="text" name="username" required data-msg="请输入用户名" placeholder="用户名" value="admin" class="input-material">
+                    </div>
+                    <div class="form-group">
+                      <input id="login-password" type="password" name="password" required data-msg="请输入密码" placeholder="密码" class="input-material">
+                    </div>
+                    <button id="login" type="submit" class="btn btn-primary">登录</button>
+                    <div style="margin-top: -40px;"> 
+                    	<!-- <input type="checkbox"  id="check1"/>&nbsp;<span>记住密码</span>
+                    	<input type="checkbox" id="check2"/>&nbsp;<span>自动登录</span> -->
+                    	<div class="custom-control custom-checkbox " style="float: right;">
+											    <input type="checkbox" class="custom-control-input" id="check2" >
+											    <label class="custom-control-label" for="check2">自动登录</label>
+											</div>
+											<div class="custom-control custom-checkbox " style="float: right;">
+											    <input type="checkbox" class="custom-control-input" id="check1" >
+											    <label class="custom-control-label" for="check1">记住密码&nbsp;&nbsp;</label>
+											</div> 
+                    </div>
+                  </form>
+                  <br />
+                  <small>没有账号?</small><a href="register.jsp" class="signup">&nbsp;注册</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="https://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script><!--表单验证-->
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+    <script>
+    	$(function(){
+    		/*判断上次是否勾选记住密码和自动登录*/
+    		var check1s=localStorage.getItem("check1");
+    		var check2s=localStorage.getItem("check2");
+    		var oldName=localStorage.getItem("userName");
+    		var oldPass=localStorage.getItem("passWord");
+    		if(check1s=="true"){
+    			 $("#login-username").val(oldName);
+    			 $("#login-password").val(oldPass);
+    			 $("#check1").prop('checked',true);
+    		}else{
+    			 $("#login-username").val('');
+    			 $("#login-password").val('');
+    			 $("#check1").prop('checked',false);
+    		}
+    		if(check2s=="true"){
+    			$("#check2").prop('checked',true);
+    			$("#loginFrom").submit();
+    			//location="https://www.baidu.com?userName="+oldName+"&passWord="+oldPass;//添加退出当前账号功能
+    		}else{
+    			$("#check2").prop('checked',false);
+    		}
+    		/*拿到刚刚注册的账号*/
+    		/*if(localStorage.getItem("name")!=null){
+    			$("#login-username").val(localStorage.getItem("name"));
+    		}*/
+    		/*登录*/
+    		$("#login").click(function(){
+    			var userName=$("#login-username").val();
+    			var passWord=$("#login-password").val();
+    			/*获取当前输入的账号密码*/
+    			localStorage.setItem("userName",userName)
+    			localStorage.setItem("passWord",passWord)
+    			/*获取记住密码  自动登录的 checkbox的值*/
+    			var check1 = $("#check1").prop('checked');
+	    		var check2 = $('#check2').prop('checked');
+	    		localStorage.setItem("check1",check1);
+	    		localStorage.setItem("check2",check2);
+    		})
+    		
+    		/*$("#check2").click(function(){
+    			var flag=$('#check2').prop('checked');
+    			if(flag){
+    				var userName=$("#login-username").val();
+	    			var passWord=$("#login-password").val();
+	    			$.ajax({
+	    				type:"post",
+	    				url:"http://localhost:8080/powers/pow/regUsers",
+	    				data:{"userName":userName,"passWord":passWord},
+	    				async:true,
+	    				success:function(res){
+	    					alert(res);
+	    				}
+	    			});
+    			}
+    		})*/
+    	})
+    </script>
+    <script>
 						
 						var error="${error}";
-						if(error=="error"){
-
-						alert("帐户名或密码错误");
-						}
 						if(error=="success"){
 							alert("恭喜您成功注册！");
 						}
 </script>
-</body>
+  </body>
 </html>

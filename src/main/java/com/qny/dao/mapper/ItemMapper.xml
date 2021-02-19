@@ -33,6 +33,27 @@
 
 	</select>
 	
+	<!-- 组合查询物品列表 -->
+	<select id="getItemByCompositeQuery" parameterType="QueryItem" resultMap="BaseResultMap">
+        SELECT * FROM `item` 
+		<where>
+			<if test="itemName!=null and itemName!=''">
+				and name like '%${itemName}%'
+			</if>
+			<if test="itemId !=null and itemId!=''">
+				and item_number=#{itemId}
+			</if>
+			<if test="minPrice !=null and minPrice!=''">
+				and price &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice !=null and maxPrice!=''">
+				and price &lt;= #{maxPrice}
+			</if>
+		</where>
+
+	</select>
+	
+	
 	<!-- 根据masterId查询物品列表 -->
 	<select id="getItemListByMasterId" parameterType="Integer" resultMap="BaseResultMap">
 		select * from item
@@ -44,8 +65,7 @@
 	</select>
 	
 	
-	<select id="findItemListByVoCount" parameterType="QueryVo"
-		resultType="int">
+	<select id="findItemListByVoCount" parameterType="QueryVo" resultType="int">
 		select count(*)
 		from item
 		<where>
@@ -67,6 +87,7 @@
 			</if>
 		</where>
 	</select>
+	
 	<select id="findId" parameterType="Integer" resultMap="BaseResultMap2">
 		select * from item where itemId=#{itemId}
 	</select>

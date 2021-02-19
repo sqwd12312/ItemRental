@@ -73,7 +73,7 @@
 
 <div class="admin-content-body">
 	<div class="am-cf am-padding am-padding-bottom-0">
-		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">请确定订单正确无误再提交！</strong><small></small></div>
+		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg" style="color:#F00" >请确认无误再提交，订单提交时默认支付！</strong></div>
     </div>
 	<hr>
 	
@@ -116,11 +116,13 @@
                             </tr>
                             <tr>
                                 <th><i class="require-red">*</i>退租时间：</th>
-                              <td><input class="inline laydate-icon" name="toDate" id="todate" value="${apply.toDate}" size="50"  type="text" readonly style="width:180px;"></td>
+                              <td><input class="inline laydate-icon" name="toDate" id="todate" value="${apply.toDate}" size="50"  type="text" readonly style="width:180px;">
+                              </td>
                             </tr> 
                             <tr>
                                 <th><i class="require-red">*</i>需交租金：</th>
-                              <td><input class="common-text" name="totalPrice" id="totalPrice" value="${apply.totalPrice}" size="50"  type="text" style="width:200px;"></td>
+                              <td><input class="common-text" name="totalPrice" id="totalPrice" value="${apply.totalPrice}" size="50"  type="text" style="width:200px;"
+                              onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"></td>
                             </tr>                                                       
 								<tr>
                                 <th></th>
@@ -128,6 +130,8 @@
                                     <input type="hidden" name=itemId value="${apply.itemId}"/>
                                     <input class="btn btn-primary btn6 mr10" value="提交" type="submit">
                                     <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
+                                    
+                                    
                                 </td>
                             </tr>
 	
@@ -185,6 +189,12 @@
             max: laydate.now(+1) //+1代表明天，+2代表后天，以此类推
         });
     </script>
+    
+    
+    
+
+
+
    
 </body>
 

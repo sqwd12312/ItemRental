@@ -38,7 +38,7 @@ public class PaidController {
 	// 管理员查找所有已缴租金列表
 	@RequestMapping("/selectall")
 	public String selectall(Model model, QueryVo vo, @RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		List<Paid> list = paidService.selectall(vo);
 		PageInfo<Paid> p = new PageInfo<Paid>(list);
@@ -56,7 +56,7 @@ public class PaidController {
 	@RequestMapping("/findmypaid")
 	public String findmypaid(HttpSession httpSession, Model model,QueryVo vo,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		vo.setUserId(user1.getId());
 		PageHelper.startPage(page, pageSize);
@@ -134,7 +134,7 @@ public class PaidController {
 	@RequestMapping("/getMyPaidBack")
 	public String getMyPaidBack(HttpSession httpSession,Model model,QueryVo vo,
 			@RequestParam(required = false,defaultValue="1") Integer page,
-			@RequestParam(required = false,defaultValue="2") Integer pageSize){
+			@RequestParam(required = false,defaultValue="8") Integer pageSize){
 		User user = (User) httpSession.getAttribute("user");
 		vo.setUserId(user.getId());
 		PageHelper.startPage(page, pageSize);
@@ -161,7 +161,7 @@ public class PaidController {
 	@RequestMapping("/incomeByUser")
 	public String incomeByUserId(QueryVo vo,Model model,HttpSession httpSession,
 			@RequestParam(required = false,defaultValue = "1") Integer page,
-			@RequestParam(required = false,defaultValue = "2") Integer pageSize){
+			@RequestParam(required = false,defaultValue = "8") Integer pageSize){
 		
 		User user = (User)httpSession.getAttribute("user");
 		vo.setUserId(user.getId());
@@ -190,7 +190,7 @@ public class PaidController {
 	@RequestMapping("getAllPaidRent")
 	public String getAllPaidRent(Model model,QueryVo vo,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize){
 		//开启分页
 		PageHelper.startPage(page, pageSize);
 		//得到已缴纳的租金列表
@@ -217,7 +217,7 @@ public class PaidController {
 	@RequestMapping("getAllPaidBackRent")
 	public String getAllPaidBackRent(Model model,QueryVo vo,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize){
 		//开启分页
 		PageHelper.startPage(page, pageSize);
 		//得到已退回的租金列表

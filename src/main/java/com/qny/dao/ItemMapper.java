@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.qny.pojo.Item;
+import com.qny.pojo.QueryItem;
 import com.qny.pojo.QueryVo;
 @Repository
 public interface ItemMapper {
@@ -52,5 +53,10 @@ public interface ItemMapper {
 	//qny
 	//根据物品编号查询物品
 	public Item getItemByItemNumber(String itemNumber);
+	
+	/*
+	 * 组合查询可供租赁的物品
+	 * */
+	public List<Item> getItemByCompositeQuery(QueryItem qItem);
 	
 }

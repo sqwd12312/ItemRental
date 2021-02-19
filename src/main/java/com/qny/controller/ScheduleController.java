@@ -21,7 +21,7 @@ public class ScheduleController {
 
 	@RequestMapping("/selectAll")
 	public String selectAll(Model model, @RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		List<Schedule> schedule = scheduleService.selectAll();
 		PageInfo<Schedule> p = new PageInfo<Schedule>(schedule);

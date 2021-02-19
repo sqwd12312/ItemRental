@@ -47,7 +47,7 @@ public class ApplyoutController {
 	//管理员查看所有退租申请
 	@RequestMapping("/findallapplyout")
 	public String findallapplyout(Model model, @RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		List<Applyout> applyoutList = applyoutService.getAllApplyOut();
 		PageInfo<Applyout> p = new PageInfo<Applyout>(applyoutList);
@@ -61,7 +61,7 @@ public class ApplyoutController {
 	@RequestMapping("/findAllApplyoutByZuke")
 	public String findAllApplyoutByZuke(HttpSession httpSession,Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		List<Applyout> applyoutList = applyoutService.getAllApplyOutByZuke(user.getId());
@@ -164,7 +164,7 @@ public class ApplyoutController {
 	@RequestMapping("/getmyapplyout")
 	public String getmyapplyout(Model model, HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		//根据userList中的id查询出对应用户的退租申请结果

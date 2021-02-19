@@ -47,7 +47,7 @@ public class ZulistController {
 	@RequestMapping("/myzulist")
 	public String getUserInRent(Model model, HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 
 		User user1 = (User) httpSession.getAttribute("user");
 		//根据userListId查询自己的在租列表

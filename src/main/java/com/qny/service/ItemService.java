@@ -3,6 +3,7 @@ package com.qny.service;
 import java.util.List;
 
 import com.qny.pojo.Item;
+import com.qny.pojo.QueryItem;
 
 public interface ItemService {
 	List<Item> selectAll();
@@ -44,7 +45,10 @@ public interface ItemService {
 	//根据物品编号查询物品
 	public Item getItemByItemNumber(String itemNumber);
 	
-	
+	/*
+	 * 组合查询可供租赁的物品
+	 * */
+	public List<Item> getItemByCompositeQuery(QueryItem qItem);
 	
 	
 }

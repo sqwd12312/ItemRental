@@ -38,7 +38,7 @@ public class CheckoutController {
 	@RequestMapping("/getallcheckout")
 	public String getAllCheckOut(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		//查询所有已退租信息
 		List<Checkout> checkoutList = checkoutService.getallcheckout();
@@ -53,7 +53,7 @@ public class CheckoutController {
 	@RequestMapping("/getAllCheckoutByUser")
 	public String getAllCheckoutByUser(HttpSession httpSession,Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		List<Checkout> checkoutList = checkoutService.getAllCheckoutByUser(user.getId());
@@ -98,7 +98,7 @@ public class CheckoutController {
 	@RequestMapping("/getMyCheckout")
 	public String getmycheckout(Model model, HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		//根据租客的userListId查询租客的已退租商品

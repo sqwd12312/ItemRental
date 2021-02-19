@@ -142,7 +142,7 @@
 	</select>
 	<update id="updateuserlist" parameterType="Userlist">
 		update userlist set
-		user_name=#{name},idcard=#{idcard},phone=#{phone}
+		user_name=#{name},idcard=#{idcard},phone=#{phone},balance=#{balance}
 		where user_id=#{user_id}
 	</update>
 	

@@ -128,7 +128,7 @@
 						<tr>
 						<tr>
 						<div style="LINE-HEIGHT: 20px; HEIGHT: 20px; TEXT-ALIGN: right; margin-top:10px">
-						以上共缴租金：<B style="color:red">${sum} </B>元
+						以上共退回租金：<B style="color:red">${sum} </B>元
 						</div>
 								<div style="LINE-HEIGHT: 20px; HEIGHT: 20px; TEXT-ALIGN: right; margin-top:10px">
 								

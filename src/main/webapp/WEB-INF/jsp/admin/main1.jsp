@@ -20,7 +20,7 @@
 	<body class="layui-layout-body">
 		<div class="layui-layout layui-layout-admin">
 			<div class="layui-header">
-				<div class="layui-logo">物品租赁系统</div>
+				<div class="layui-logo"><strong> <font  size="6" face="楷体" >租赁管理系统</font></strong></div>
 				<ul class="layui-nav layui-layout-right">
 					<li class="layui-nav-item">
 						<a href="javascript:;">

@@ -1,6 +1,9 @@
 package com.qny.controller;
 
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +52,9 @@ public class ApplyController {
 		User user1 = (User) httpSession.getAttribute("user");
 		Integer user_id = user1.getId();
 		Userlist list = userlistService.findhasuserlist(user_id);
+		
+		
+		
 		if (list == null) {
 			model.addAttribute("info", "applycheck");
 			return "redirect:item.action";
@@ -63,7 +69,19 @@ public class ApplyController {
 				model.addAttribute("Chuzu",apply.getChuZu());
 				model.addAttribute("Zuke",apply.getZuKe());
 				return "user/checkorderback";
-			}else{
+			}
+			//计算相差天数
+			int days = daysxiangcha(apply.getFromDate(),apply.getToDate())+1;
+			
+			double price = apply.getPrice()*days;
+		    if (price!=apply.getTotalPrice()) {
+				model.addAttribute("info", "提交失败！需交租金为"+price+",元");
+				model.addAttribute("apply",apply);
+				model.addAttribute("Chuzu",apply.getChuZu());
+				model.addAttribute("Zuke",apply.getZuKe());
+				return "user/checkorderback";
+			}
+			else{
 				Item item = itemService.findId(Integer.parseInt(apply.getItemId()));
 				//3.更新商品状态
 				item.setStatus("已被申请");
@@ -116,7 +134,7 @@ public class ApplyController {
 	@RequestMapping("/findapplylist")
 	public String findApplyList(Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 		PageHelper.startPage(page, pageSize);
 		List<Userlist> applylist = applyService.findapplylist();
 		PageInfo<Userlist> p = new PageInfo<Userlist>(applylist);
@@ -130,7 +148,7 @@ public class ApplyController {
 	@RequestMapping("/getMyApply")
 	public String getMyApply(HttpSession httpSession,Model model, 
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "2") Integer pageSize) throws Exception {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) throws Exception {
 		PageHelper.startPage(page, pageSize);
 
 		User zuke = (User) httpSession.getAttribute("user");
@@ -169,7 +187,7 @@ public class ApplyController {
 	@RequestMapping("/getmyapply")
 	public String getmyapply(Model model, HttpSession httpSession,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(required = false, defaultValue = "3") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "8") Integer pageSize) {
 		User user1 = (User) httpSession.getAttribute("user");
 		PageHelper.startPage(page, pageSize);
 		//2.根据userListId查询租客所有申请
@@ -188,4 +206,35 @@ public class ApplyController {
 		model.addAttribute("mainPage", "myapply.jsp");
 		return "redirect:getmyapply.action";
 	}
+	
+	//计算时间差的方法
+	public static int daysxiangcha(String dateStr1, String dateStr2) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+		try{
+		dateStr1 = sdf.format(sdf2.parse(dateStr1));
+		dateStr2 = sdf.format(sdf2.parse(dateStr2));
+		} catch (ParseException e) {
+		e.printStackTrace();
+		}
+		int year1 = Integer.parseInt(dateStr1.substring(0, 4));
+		int month1 = Integer.parseInt(dateStr1.substring(4, 6));
+		int day1 = Integer.parseInt(dateStr1.substring(6, 8));
+		int year2 = Integer.parseInt(dateStr2.substring(0, 4));
+		int month2 = Integer.parseInt(dateStr2.substring(4, 6));
+		int day2 = Integer.parseInt(dateStr2.substring(6, 8));
+		Calendar c1 = Calendar.getInstance();
+		c1.set(Calendar.YEAR, year1);
+		c1.set(Calendar.MONTH, month1 - 1);
+		c1.set(Calendar.DAY_OF_MONTH, day1);
+		Calendar c2 = Calendar.getInstance();
+		c2.set(Calendar.YEAR, year2);
+		c2.set(Calendar.MONTH, month2 - 1);
+		c2.set(Calendar.DAY_OF_MONTH, day2);
+		long mills = c1.getTimeInMillis() > c2.getTimeInMillis()
+		? c1.getTimeInMillis() - c2.getTimeInMillis()
+		: c2.getTimeInMillis() - c1.getTimeInMillis();
+		return (int) (mills / 1000 / 3600 / 24);
+	}
+		
 }

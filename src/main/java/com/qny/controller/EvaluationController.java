@@ -88,7 +88,7 @@ public class EvaluationController {
     @RequestMapping("getEvalutionByItemNumber")
     public String getEvalutionByItemNumber(Model model,String itemNumber,
     		@RequestParam(required = false, defaultValue = "1") Integer page,
-    		@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+    		@RequestParam(required = false, defaultValue = "8") Integer pageSize){
     	Item item = itemService.getItemByItemNumber(itemNumber);
     	model.addAttribute("itemName",item.getName());
     	model.addAttribute("itemNumber",itemNumber);
@@ -112,7 +112,7 @@ public class EvaluationController {
     @RequestMapping("myZulingEvaluation")
     public String getMyZulingEvaluation(Model model,HttpSession httpSession,
     		@RequestParam(required = false, defaultValue = "1") Integer page,
-    		@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+    		@RequestParam(required = false, defaultValue = "8") Integer pageSize){
     	User user = (User)httpSession.getAttribute("user");
     	PageHelper.startPage(page, pageSize);
     	List<Evaluation> evaluationList = evaluationService.getMyZulingEvaluation(user.getId().toString());
@@ -172,7 +172,7 @@ public class EvaluationController {
     @RequestMapping("myChuzuEvaluation")
     public String myChuzuEvaluation(Model model,HttpSession httpSession,
     		@RequestParam(required = false, defaultValue = "1") Integer page,
-    		@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+    		@RequestParam(required = false, defaultValue = "8") Integer pageSize){
     	User user = (User)httpSession.getAttribute("user");
     	PageHelper.startPage(page, pageSize);
     	List<Evaluation> evaluationList = evaluationService.getAllEvaluationFromZuke(user.getId());
@@ -193,7 +193,7 @@ public class EvaluationController {
     @RequestMapping("getItemEvaluationsByAdmin")
     public String getItemEvaluations(Model model,
     		@RequestParam(required = false, defaultValue = "1") Integer page,
-    		@RequestParam(required = false, defaultValue = "2") Integer pageSize){
+    		@RequestParam(required = false, defaultValue = "8") Integer pageSize){
     	//设置分页形式
     	PageHelper.startPage(page, pageSize);
     	//得到所有物品的评价信息

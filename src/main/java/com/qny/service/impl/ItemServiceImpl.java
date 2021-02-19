@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.qny.dao.ItemMapper;
 import com.qny.pojo.Item;
+import com.qny.pojo.QueryItem;
 import com.qny.service.ItemService;
 
 @Service
@@ -101,6 +102,14 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public Item getItemByItemNumber(String itemNumber) {
 		return itemMapper.getItemByItemNumber(itemNumber);
+	}
+
+	/**   
+	 * 组合查询可供租赁的物品
+	 */ 
+	@Override
+	public List<Item> getItemByCompositeQuery(QueryItem qItem) {
+		return itemMapper.getItemByCompositeQuery(qItem);
 	}
 
 }

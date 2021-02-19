@@ -34,19 +34,28 @@
 <div>
 <div class="admin-content-body">
 	<div class="am-cf am-padding am-padding-bottom-0">
-		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">物品列表</strong><small></small></div>
+		<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">物品列表</strong><small></small></div><br>
+		<div class="search-wrap">
+                <form action="getItemByCompositeQuery.action" method="post" >
+                    <table class="search-tab">
+                        <tr>
+                            <th width="100">物品编号：</th>
+                            <td><input class="common-text"  name="itemId" value="${qItem.itemId }"  ></td>
+                            <th width="100">物品名称：</th>
+                            <td><input class="common-text"  name="itemName" value="${qItem.itemName }"  ></td>
+                            <th width="150">租金区间(元/天)：</th>
+                            <td><input class="common-text"  name="minPrice" value="${qItem.minPrice }"  ></td>
+                            <th width="5">—</th>
+                            <td><input class="common-text"  name="maxPrice" value="${qItem.maxPrice }"  ></td>
+                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
     </div>
 	<hr>
 </div>
-	<form id="houseForm" name="houseForm"
-		action="item.action"
-		method=post >
-						 <div class="result-title">
-                    <div class="result-list">
-                      
-                        
-                    </div>
-                </div>
+	<form id="houseForm" name="houseForm"  action="getItemByCompositeQuery.action" method=post >
 
 					<div class="result-content">
 						<table id=grid
@@ -54,8 +63,8 @@
 							<tbody>
 								<tr
 									style="FONT-WEIGHT: bold; FONT-STYLE: normal; BACKGROUND-COLOR: #eeeeee; TEXT-DECORATION: none">
-									<td>物品名称</td>
 									<td>物品编号</td>									
+									<td>物品名称</td>
 									<td>备注</td>
 									<td>价格/天</td>
 									<td>状态</td>									
@@ -64,8 +73,8 @@
 								<c:forEach items="${itemList}" var="itemList">
 									<tr
 										style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">										
-										<td>${itemList.name}</td>
 										<td>${itemList.itemNumber }</td>
+										<td>${itemList.name}</td>
 										<td>${itemList.note}</td>
 										<td>${itemList.price}&nbsp;元</td>
 										<td>${itemList.status}</td>
